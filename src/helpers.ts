@@ -75,3 +75,47 @@ export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<P
   })
   return resultingPRs;
 }
+
+
+
+
+export async function addLabel(context: Context, issue: any, name: string, color: string) {
+  const params = Object.assign({}, issue, {labels: [name]})
+
+  await ensureLabelExists(context, {name, color})
+  await context.octokit.issues.addLabels(params);
+}
+
+export async function closeIssue(context: Context, params: any) {
+  const closeParams = Object.assign({}, params, {state: 'closed'})
+
+  return context.octokit.issues.update(closeParams);
+}
+
+export async function comment(context: Context, params:any) {
+  return context.octokit.issues.createComment(params);
+}
+
+export async function ensureLabelExists(context: Context, {name, color}: Record<string, string>) {
+  try {
+    return await context.octokit.issues.getLabel(context.repo({name}));
+  } catch (e) {
+    return context.octokit.issues.createLabel({...context.repo(), name, color});
+  }
+}
+
+export async function labelExists(context: Context, name: string) {
+  try {
+    await context.octokit.issues.getLabel(context.repo({name}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+export async function hasPushAccess(context: Context, params: any) {
+  const permissionResponse = await context.octokit.repos.getCollaboratorPermissionLevel(params);
+  const level = permissionResponse.data.permission;
+
+  return level === 'admin' || level === 'write';
+}

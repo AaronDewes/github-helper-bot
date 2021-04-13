@@ -9,8 +9,9 @@ This bot wouldn't be possible without these amazing projects:
 
 [Probot](https://github.com/probot)
 [probot-unfurl](https://github.com/probot/unfurl/)
+[mistaken-pull-closer](https://github.com/probot/mistaken-pull-closer)
 
-... And also, of course, every dependency in our dependency tree.
+... And, of course, every dependency in our dependency tree.
 
 
 Thanks to everyone who created or helped creating these projects!

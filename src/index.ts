@@ -6,8 +6,11 @@ import { graphql, GraphQlQueryResponseData } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
 // @ts-ignore
 import { config, composeConfigGet } from '@probot/octokit-plugin-config';
-import { comparePRList } from './helpers';
+import jp from 'jsonpath';
+
+import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, labelExists } from './helpers';
 import unfurl from './unfurl/unfurl'
+import defaultConfig from './default-config';
 
 // Check for new PRs every PR_FETCH_TIME minutes
 const PR_FETCH_TIME = 5;
@@ -30,6 +33,7 @@ export interface PRInfo {
   head: string;
 }
 
+
 function getPermissionDeniedError(username: string) {
 return `
 :wave: Hello!
@@ -44,10 +48,14 @@ Check [this repo](https://github.com/AaronDewes/UmbrelBot-v2) to view it.
  * @returns {PRInfo[]} An array of pull requests with basic information about them
  */
 async function getPRs(): Promise<PRInfo[]> {
-  const fetchedData: GraphQlQueryResponseData = await ProbotGraphQL(
+  let fetchedData: GraphQlQueryResponseData = await ProbotGraphQL(
     `
       {
-        search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, last: 100) {
+        search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100) {
+          pageInfo { 
+            hasNextPage
+            endCursor
+          }
           edges {
             node {
               ... on PullRequest {
@@ -72,6 +80,44 @@ async function getPRs(): Promise<PRInfo[]> {
       }
     `
   );
+  let hasNextPage = fetchedData.data.search.pageInfo.hasNextPage;
+  let endCursor = fetchedData.data.search.pageInfo.endCursor;
+  while(hasNextPage == true) {
+    let nowFetched: GraphQlQueryResponseData = await ProbotGraphQL(
+      `
+        {
+          search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100, after: ${endCursor}) {
+            pageInfo { 
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                ... on PullRequest {
+                  number,
+                  headRefName,
+                  commits(last: 1) {
+                    edges {
+                      node {
+                        commit {
+                        abbreviatedOid
+                        }
+                      }
+                    }
+                  }
+                  baseRepository {
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+      `);
+      hasNextPage = nowFetched.data.search.pageInfo.hasNextPage;
+      endCursor = fetchedData.data.search.pageInfo.endCursor;
+      fetchedData.data.search.edges = [...fetchedData.data.search.edges, ...nowFetched.data.search.edges ]
+  }
   let result: PRInfo[] = [];
   fetchedData.data.search.edges.forEach((node: any) => {
     let subNode = node.node;
@@ -117,6 +163,13 @@ async function handleCommand(cmd: string, args: string, context: Context, isPR: 
         case "help":
             helpText(context)
             return;
+        case "label":
+          if(labelExists(context, args)) {
+            addLabel(context, context.issue(), "args", "");
+          } else {
+            context.octokit.issues.createComment({...context.issue(), body: `This label could not be found.` });
+          }
+          return;
         default:
             return;
     }
@@ -176,6 +229,42 @@ module.exports = (app: Probot) => {
       return unfurl(context, <string>issue.data.body_html);
     });
   
+
+    app.on('pull_request.opened', async context => {
+      const htmlUrl = context.payload.pull_request.html_url;
+      app.log.debug(`Inspecting: ${htmlUrl}`);
+      const userConfig = await ProbotREST.config.get({
+        ...context.repo(),
+        path: ".github/UmbrelBot.yml",
+      }) || {};
+      const config = {
+        ...defaultConfig,
+        ...userConfig
+      };
+      const username = context.payload.pull_request.user.login;
+      const canPush = await hasPushAccess(context, context.repo({username}));
+      const data = Object.assign({has_push_access: canPush}, context.payload);
+
+      if (!config.filters.every((filter: any, i: number) => {
+        try {
+          if (jp.query([data], `$[?(${filter})]`).length > 0) {
+            app.log.info(`Filter "${filter}" matched the PR ✅ [${i + 1} of ${config.filters.length}]`)
+            return true
+          }
+        } catch (e) {
+          app.log.debug(`Malformed JSONPath query: "${filter}"`)
+        }
+        return false
+      })) return
+
+      app.log.debug(`Close PR ${htmlUrl}`);
+      await comment(context, context.issue({body: config.commentBody}));
+      if (config.addLabel) {
+        await addLabel(context, context.issue(), config.labelName, config.labelColor);
+      }
+      return closeIssue(context, context.issue());
+    })
+
     /* Check for new PRs every 5min */
     setInterval(async () => {
         let lastOpenPRs = openPRs;

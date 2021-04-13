@@ -512,6 +512,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsonpath@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@types/jsonpath@npm:0.2.0"
+  checksum: 4862629883b5cc01d0b40cc54f0c46296a6c643f4b5b379c8af180dbc36b71eb8184bc6c1f3ec96c436f136d894f5e4e6b10c507d0329f6acf69449f25b705e1
+  languageName: node
+  linkType: hard
+
 "@types/jsonwebtoken@npm:^8.3.3":
   version: 8.5.1
   resolution: "@types/jsonwebtoken@npm:8.5.1"
@@ -1599,6 +1606,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"escodegen@npm:^1.8.1":
+  version: 1.14.3
+  resolution: "escodegen@npm:1.14.3"
+  dependencies:
+    esprima: ^4.0.1
+    estraverse: ^4.2.0
+    esutils: ^2.0.2
+    optionator: ^0.8.1
+    source-map: ~0.6.1
+  dependenciesMeta:
+    source-map:
+      optional: true
+  bin:
+    escodegen: bin/escodegen.js
+    esgenerate: bin/esgenerate.js
+  checksum: 548c5a83a81a51122f1006309a392e1412bb00657f15aca60f01f9d4553851bdaf0519d898fd3ee2bb46f116e03ee48757f4d9a28a7b58bc8c096fd4b33f6cbc
+  languageName: node
+  linkType: hard
+
 "escodegen@npm:^2.0.0":
   version: 2.0.0
   resolution: "escodegen@npm:2.0.0"
@@ -1618,6 +1644,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esprima@npm:1.2.2":
+  version: 1.2.2
+  resolution: "esprima@npm:1.2.2"
+  bin:
+    esparse: ./bin/esparse.js
+    esvalidate: ./bin/esvalidate.js
+  checksum: 8cb4d8a7f61db2a4ba4d58ad5fcf91079e760f7e46bd302a64b5a543f0460a3c642dfc87dd185d7195bdf7a6cc7ffc06a1c690b9ef24237b508255d4ed5251d9
+  languageName: node
+  linkType: hard
+
 "esprima@npm:^4.0.0, esprima@npm:^4.0.1":
   version: 4.0.1
   resolution: "esprima@npm:4.0.1"
@@ -1625,6 +1661,13 @@ __metadata:
     esparse: ./bin/esparse.js
     esvalidate: ./bin/esvalidate.js
   checksum: 5df45a3d9c95c36800d028ba76d8d4e04e199932b58c2939f462f859fd583e7d39b4a12d3f97986cf272a28a5fe5948ee6e49e36ef63f67b5b48d82a635c5081
+  languageName: node
+  linkType: hard
+
+"estraverse@npm:^4.2.0":
+  version: 4.3.0
+  resolution: "estraverse@npm:4.3.0"
+  checksum: 1e4c627da9e9af07bf7b2817320f606841808fb2ec0cbd81097b30d5f90d8613288b3e523153babe04615d59b54ef876d98f0ca27488b6c0934dacd725a8d338
   languageName: node
   linkType: hard
 
@@ -1881,6 +1924,7 @@ __metadata:
     "@octokit/rest": ^18.5.2
     "@probot/octokit-plugin-config": ^1.0.3
     "@types/jsdom": ^16.2.10
+    "@types/jsonpath": ^0.2.0
     "@types/node": ^14.14.37
     body-parser: ^1.19.0
     bottleneck: ^2.19.5
@@ -1888,6 +1932,7 @@ __metadata:
     hbs: ^4.1.1
     isomorphic-git: ^1.8.2
     jsdom: ^16.5.3
+    jsonpath: ^1.1.1
     octokit-auth-probot: ^1.2.4
     parse-reminder: ^1.3.0
     probot: ^11.1.0
@@ -2436,6 +2481,17 @@ __metadata:
   version: 5.0.1
   resolution: "json-stringify-safe@npm:5.0.1"
   checksum: 261dfb8eb3e72c8b0dda11fd7c20c151ffc1d1b03e529245d51708c8dd8d8c6a225880464adf41a570dff6e5c805fd9d1f47fed948cfb526e4fbe5a67ce4e5f4
+  languageName: node
+  linkType: hard
+
+"jsonpath@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "jsonpath@npm:1.1.1"
+  dependencies:
+    esprima: 1.2.2
+    static-eval: 2.0.2
+    underscore: 1.12.1
+  checksum: 4741e517f425e4b7c004c1c1452d8bf13084784cd75a1fd011fb1fa824d07675d1dc2b69111ffb45ada74266e289eef78efb7adccc9022e1e3ab6dea68ad0539
   languageName: node
   linkType: hard
 
@@ -3605,6 +3661,15 @@ resolve@^1.19.0:
   languageName: node
   linkType: hard
 
+"static-eval@npm:2.0.2":
+  version: 2.0.2
+  resolution: "static-eval@npm:2.0.2"
+  dependencies:
+    escodegen: ^1.8.1
+  checksum: 58a3e85b2e1ee16e1b779bb1440da71dc515b76d086e811bf31d399b998b0ad42ebd30ac6eef54971708f059f1c393efe2146fceb6c2b413c2ed48e27d5f5a53
+  languageName: node
+  linkType: hard
+
 "statuses@npm:>= 1.5.0 < 2, statuses@npm:~1.5.0":
   version: 1.5.0
   resolution: "statuses@npm:1.5.0"
@@ -3863,6 +3928,13 @@ typescript@^4.2.4:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: ff326348c2f06ae20336f7b390790a346906e316dd93c37c6d36c2a0112c220785a4974440ecefe676a2c0195a1e25265a9fed420009a530826f7567fa527f9c
+  languageName: node
+  linkType: hard
+
+"underscore@npm:1.12.1":
+  version: 1.12.1
+  resolution: "underscore@npm:1.12.1"
+  checksum: b53ae924fe3608ac7875a0eec20988611a02dc174bad40680dbb9fe994c40fc457b6d4f618f8b9af930c31549809c27f70dddccd83957a32bab27b1eea858c1b
   languageName: node
   linkType: hard
 
