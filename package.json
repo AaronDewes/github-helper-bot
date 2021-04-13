@@ -8,6 +8,7 @@
     "@octokit/core": "^3.4.0",
     "@octokit/graphql": "^4.6.1",
     "@octokit/rest": "^18.5.2",
+    "@probot/octokit-plugin-config": "^1.0.3",
     "@types/jsdom": "^16.2.10",
     "body-parser": "^1.19.0",
     "bottleneck": "^2.19.5",

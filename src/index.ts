@@ -4,6 +4,8 @@ import remind from './remind';
 const { createProbotAuth } = require("octokit-auth-probot");
 import { graphql, GraphQlQueryResponseData } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
+// @ts-ignore
+import { config, composeConfigGet } from '@probot/octokit-plugin-config';
 import { comparePRList } from './helpers';
 import unfurl from './unfurl/unfurl'
 
@@ -134,6 +136,17 @@ module.exports = (app: Probot) => {
                 body: getPermissionDeniedError(context.issue().owner)
             });
         }
+
+        const { config } = await ProbotREST.config.get({
+          ...context.repo(),
+          path: ".github/UmbrelBot.yml",
+        });
+
+        if(config.blacklist && config.blacklist.includes(context.payload.sender)) {
+          console.warn(`Blacklisted user @${context.payload.sender} tried to use the bot.`)
+          return;
+        }
+
         // Check if it is a command
         const { comment, issue } = context.payload;
         const command = <RegExpMatchArray>(comment || issue).body.match(/^\/([\w]+)\b *(.*)?$/m);
