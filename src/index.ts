@@ -5,7 +5,7 @@ const { createProbotAuth } = require("octokit-auth-probot");
 import { graphql, GraphQlQueryResponseData } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
 import { comparePRList } from './helpers';
-
+import unfurl from './unfurl/unfurl'
 
 // Check for new PRs every PR_FETCH_TIME minutes
 const PR_FETCH_TIME = 5;
@@ -150,6 +150,19 @@ module.exports = (app: Probot) => {
         }
     });
 
+    app.on(['issue_comment.created'], async context => {
+      const comment = await context.octokit.issues.getComment({
+        ...context.repo(),
+        id: context.payload.comment.id
+      });
+      return unfurl(context, <string>comment.data.body_html);
+    });
+  
+    app.on(['issues.opened', 'pull_request.opened'], async context => {
+      const issue = await context.octokit.issues.getComment(context.issue());
+      return unfurl(context, <string>issue.data.body_html);
+    });
+  
     /* Check for new PRs every 5min */
     setInterval(async () => {
         let lastOpenPRs = openPRs;

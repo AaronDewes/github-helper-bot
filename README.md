@@ -11,6 +11,7 @@ This bot wouldn't be possible without these amazing projects:
 [gh-polls-bot](https://github.com/evenchange4/gh-polls-bot) by [Micheal HSU](https://michaelhsu.tw/)
 [probot-ooo](https://github.com/swinton/probot-ooo) by [Steve Winton](https://github.com/swinton)
 [sentiment-bot](https://github.com/behaviorbot/sentiment-bot)
+[probot-unfurl](https://github.com/probot/unfurl/)
 
 ... And also, of course, every dependency in our dependency tree.
 
