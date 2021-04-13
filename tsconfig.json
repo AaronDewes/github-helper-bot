@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        /* Basic Options */
+        "incremental": true /* Enable incremental compilation */,
+        "target": "esnext",
+        "module": "commonjs",
+        "declaration": true,
+        "sourceMap": true,
+        "outDir": "./lib",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "typeRoots": [
+            "src/types"
+        ]
+    },
+    "include": ["src/"],
+    "compileOnSave": true
+  }
