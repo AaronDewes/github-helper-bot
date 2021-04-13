@@ -826,12 +826,12 @@
         "signature": "df9843a87ece935e596850fbbaef73b955958b4284bdc3641121ce4022651710",
         "affectsGlobalScope": false
       },
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/index.d.ts": {
-        "version": "0f7aea7e3a3444d856189cd60ce4fba82f657357b1c5ef0aadf9ba748b7123db",
-        "signature": "0f7aea7e3a3444d856189cd60ce4fba82f657357b1c5ef0aadf9ba748b7123db",
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts": {
+        "version": "21d6a4b4ab6de7db61580f500b8f4e9d3e1bb12d8047baf2725ddcd1aab47228",
+        "signature": "21d6a4b4ab6de7db61580f500b8f4e9d3e1bb12d8047baf2725ddcd1aab47228",
         "affectsGlobalScope": false
       },
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/http/node/index.d.ts": {
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts": {
         "version": "b2dbf54ee6a2918e8e3ae5d079c63c79f3dc27a9cf8dd9bc62ec893cbe6c827b",
         "signature": "b2dbf54ee6a2918e8e3ae5d079c63c79f3dc27a9cf8dd9bc62ec893cbe6c827b",
         "affectsGlobalScope": false
@@ -879,6 +879,11 @@
       "../.yarn/$$virtual/@probot-octokit-plugin-config-virtual-168c1e6433/0/cache/@probot-octokit-plugin-config-npm-1.0.3-4245e73dfa-7e82a25186.zip/node_modules/@probot/octokit-plugin-config/dist-types/index.d.ts": {
         "version": "d6c3143e31bdbc1955e2143f9639ea4f1cc2dfa65b86c47589aefd9fc9bdd803",
         "signature": "d6c3143e31bdbc1955e2143f9639ea4f1cc2dfa65b86c47589aefd9fc9bdd803",
+        "affectsGlobalScope": false
+      },
+      "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts": {
+        "version": "b8bc64f2a9515e7ba8b523260cf3b0a418eabfc556e5bee6fabd36b73f4789c2",
+        "signature": "b8bc64f2a9515e7ba8b523260cf3b0a418eabfc556e5bee6fabd36b73f4789c2",
         "affectsGlobalScope": false
       },
       "../.yarn/cache/unfurl.js-npm-5.2.5-89797b67f5-633ba28dd9.zip/node_modules/unfurl.js/dist/types.d.ts": {
@@ -946,14 +951,19 @@
         "signature": "bffef5b1364875e9166d6233fbe844c21713a613ff2c3c9168b28673db84d5f4",
         "affectsGlobalScope": false
       },
+      "../src/default-config.ts": {
+        "version": "0dac07a1fbe8eef471d139824ae7c6cb23aa1a407c4ca69c8ab3e895310454d6",
+        "signature": "f6ece653b14f3b664d5879b33177f2de8c537a02c0f1693a114bcc10d94e4d77",
+        "affectsGlobalScope": false
+      },
       "../src/index.ts": {
-        "version": "02d58bee5006acbbea4798f4e8ee6a00af1dccb2e19c41e943e38f0c6e0ecfcf",
+        "version": "01f10728cf6e692379d5bab047006ad899b304d32a858e13dab377db648c0aa9",
         "signature": "bf85b9ae547668b5a4817955c21e8e90e5157284bcd242d44dd225f22a10fedd",
         "affectsGlobalScope": false
       },
       "../src/helpers.ts": {
-        "version": "d8c101021f904f05bfeea9b45f03e2c2bbb7da71b316217cd52479cf7359ee82",
-        "signature": "e8a21bbbd551e8364995652d497a22232efcf9042ed64969acff515c2b6ad09b",
+        "version": "056367995af8908da9c726b268ef5a712fe65626035f004828422cc7415d66c0",
+        "signature": "56ca98e08ef5213a76f00b38d34bee2c5bb5c1fd3fbb2fe7f71e5502aa071be2",
         "affectsGlobalScope": false
       },
       "../src/builder.ts": {
@@ -986,6 +996,7 @@
       "typeRoots": [
         "../src/types"
       ],
+      "watch": true,
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
@@ -1514,6 +1525,12 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts"
       ],
+      "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
+      ],
       "../.yarn/cache/@types-mime-npm-1.3.2-ea71878ab3-c354bc1356.zip/node_modules/@types/mime/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
@@ -2025,13 +2042,13 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/http/node/index.d.ts": [
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/index.d.ts": [
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
@@ -2445,10 +2462,16 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
         "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/fs.d.ts",
         "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/path.d.ts",
-        "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/http/node/index.d.ts",
-        "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/index.d.ts",
+        "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts",
+        "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
         "../src/helpers.ts"
+      ],
+      "../src/default-config.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
       "../src/helpers.ts": [
         "../.yarn/cache/@octokit-rest-npm-18.5.2-51dcff47d9-b6c8ee91fb.zip/node_modules/@octokit/rest/dist-types/index.d.ts",
@@ -2467,7 +2490,9 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
+        "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
+        "../src/default-config.ts",
         "../src/helpers.ts",
         "../src/pullrequest.ts",
         "../src/remind.ts",
@@ -2782,6 +2807,12 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts"
       ],
+      "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
+      ],
       "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/assert.d.ts": [
         "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/assert.d.ts"
       ],
@@ -3055,6 +3086,18 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
+      ],
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
+      ],
       "../.yarn/cache/probot-attachments-npm-1.0.1-1c6a498d61-e4c3f67e49.zip/node_modules/probot-attachments/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
@@ -3143,6 +3186,7 @@
       ],
       "../src/helpers.ts": [
         "../.yarn/cache/@octokit-rest-npm-18.5.2-51dcff47d9-b6c8ee91fb.zip/node_modules/@octokit/rest/dist-types/index.d.ts",
+        "../.yarn/cache/@octokit-types-npm-6.13.0-df1213cae5-20e7f159be.zip/node_modules/@octokit/types/dist-types/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
         "../src/index.ts"
       ],
@@ -3222,6 +3266,7 @@
       "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
       "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
       "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
+      "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts",
       "../.yarn/cache/@types-mime-npm-1.3.2-ea71878ab3-c354bc1356.zip/node_modules/@types/mime/index.d.ts",
       "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/assert.d.ts",
       "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/async_hooks.d.ts",
@@ -3281,8 +3326,8 @@
       "../.yarn/cache/@types-tough-cookie-npm-4.0.0-c29cd799b9-5a0cccc6d0.zip/node_modules/@types/tough-cookie/index.d.ts",
       "../.yarn/cache/before-after-hook-npm-2.2.1-0eb703f70c-697c0ac2c8.zip/node_modules/before-after-hook/index.d.ts",
       "../.yarn/cache/deepmerge-npm-4.2.2-112165ced2-85abf8e004.zip/node_modules/deepmerge/index.d.ts",
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/http/node/index.d.ts",
-      "../.yarn/cache/isomorphic-git-npm-1.8.1-f2d376bfa8-8db81e5fb4.zip/node_modules/isomorphic-git/index.d.ts",
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts",
+      "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts",
       "../.yarn/cache/probot-attachments-npm-1.0.1-1c6a498d61-e4c3f67e49.zip/node_modules/probot-attachments/index.d.ts",
       "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/context.d.ts",
       "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/create-node-middleware.d.ts",
@@ -3343,6 +3388,7 @@
       "../.yarn/cache/unfurl.js-npm-5.2.5-89797b67f5-633ba28dd9.zip/node_modules/unfurl.js/dist/index.d.ts",
       "../.yarn/cache/unfurl.js-npm-5.2.5-89797b67f5-633ba28dd9.zip/node_modules/unfurl.js/dist/types.d.ts",
       "../src/builder.ts",
+      "../src/default-config.ts",
       "../src/helpers.ts",
       "../src/index.ts",
       "../src/pullrequest.ts",
