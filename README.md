@@ -1,8 +1,7 @@
 # Umbrel's GitHub bot (Version 2)
 
 This is a GitHub bot for Umbrel, built using probot.
-This is still very much in development and should not be used.
-
+This is still in development (it hasn't been tested yet) and should not be used for your own projects.
 ## Sources
 
 This bot wouldn't be possible without these amazing projects:
@@ -12,7 +11,6 @@ This bot wouldn't be possible without these amazing projects:
 [mistaken-pull-closer](https://github.com/probot/mistaken-pull-closer)
 
 ... And, of course, every dependency in our dependency tree.
-
 
 Thanks to everyone who created or helped creating these projects!
 

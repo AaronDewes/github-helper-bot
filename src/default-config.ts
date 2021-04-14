@@ -7,9 +7,9 @@ export default {
     // 3. User does not have push access to the project. They can't push to
     //    their own PR and it isn't going to be useful.
     filters: [
-      '@.pull_request.head.user.login == @.pull_request.base.user.login',
-      '@.pull_request.user.type != "Bot"',
-      '!@.has_push_access'
+        '@.pull_request.head.user.login == @.pull_request.base.user.login',
+        '@.pull_request.user.type != "Bot"',
+        '!@.has_push_access',
     ],
     commentBody: `
   Thanks for your submission.
@@ -20,5 +20,5 @@ export default {
   `,
     addLabel: true,
     labelName: 'invalid',
-    labelColor: 'e6e6e6'
-}
+    labelColor: 'e6e6e6',
+};

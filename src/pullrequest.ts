@@ -1,10 +1,10 @@
-import {Context} from 'probot';
+import { Context } from 'probot';
 import build, { buildOctokit } from './builder';
-import { Octokit } from "@octokit/rest";
+import { Octokit } from '@octokit/rest';
 
 /**
  * Manages a Pull Request
- * 
+ *
  * Currently only manages builds and comments that log that build, but more might be added
  */
 export default class PullRequest {
@@ -25,18 +25,15 @@ export default class PullRequest {
      * @param {boolean} now true if the build should be ran now,
      * false or in 5 minutes (if no new one gets triggered in that time)
      */
-    public async scheduleBuild(now: boolean = false, buildContext: Context, callbackfn?: (buildBranch: string) => void) {
-        if(now) {
-            if(typeof this.timeoutID == "number") {
+    public async scheduleBuild(now = false, buildContext: Context, callbackfn?: (buildBranch: string) => void) {
+        if (now) {
+            if (typeof this.timeoutID == 'number') {
                 clearTimeout(<number>this.timeoutID);
                 this.timeoutID = false;
             }
             return;
         }
-        if(!callbackfn) {
-            callbackfn = () => {};
-        }
-        this.timeoutID = setTimeout(build, 5 * 60 * 1000, buildContext, callbackfn)
+        this.timeoutID = setTimeout(build, 5 * 60 * 1000, buildContext, callbackfn);
     }
 
     /**
@@ -44,18 +41,21 @@ export default class PullRequest {
      * @param {boolean} now true if the build should be ran now,
      * false or in 5 minutes (if no new one gets triggered in that time)
      */
-    public async scheduleBuildFromOctokit(now: boolean = false, octokit: Octokit, owner: string, repo: string, callbackfn?: (buildBranch: string) => void) {
-        if(now) {
-            if(typeof this.timeoutID == "number") {
+    public async scheduleBuildFromOctokit(
+        now = false,
+        octokit: Octokit,
+        owner: string,
+        repo: string,
+        callbackfn?: (buildBranch: string) => void,
+    ) {
+        if (now) {
+            if (typeof this.timeoutID == 'number') {
                 clearTimeout(<number>this.timeoutID);
                 this.timeoutID = false;
             }
             return;
         }
-        if(!callbackfn) {
-            callbackfn = () => {};
-        }
-        this.timeoutID = setTimeout(buildOctokit, 5 * 60 * 1000, octokit, this.number, owner, repo, callbackfn)
+        this.timeoutID = setTimeout(buildOctokit, 5 * 60 * 1000, octokit, this.number, owner, repo, callbackfn);
     }
 
     public async addComment(id: number) {
@@ -66,9 +66,9 @@ export default class PullRequest {
         this.olderComments?.forEach((comment) => {
             context.octokit.issues.deleteComment({
                 ...context.repo(),
-                comment_id: comment
-            })
-        })
+                comment_id: comment,
+            });
+        });
     }
 
     public async deleteOldCommentsFromOctokit(octokit: Octokit) {
@@ -76,9 +76,9 @@ export default class PullRequest {
             octokit.issues.deleteComment({
                 owner: this.owner,
                 repo: this.repo,
-                comment_id: comment
-            })
-        })
+                comment_id: comment,
+            });
+        });
     }
 }
 
@@ -93,7 +93,7 @@ export class Repo {
     }
 
     managePR(number: number) {
-        if(!this.PRs[number]) {
+        if (!this.PRs[number]) {
             this.PRs[number] = new PullRequest(number, this.owner, this.repo);
         }
     }
@@ -102,12 +102,24 @@ export class Repo {
         delete this.PRs[number];
     }
 
-    public async scheduleBuild(pr: number, now: boolean = false, buildContext: Context, callbackfn?: (buildBranch: string) => void) {
+    public async scheduleBuild(
+        pr: number,
+        now = false,
+        buildContext: Context,
+        callbackfn?: (buildBranch: string) => void,
+    ) {
         this.managePR(pr);
         this.PRs[pr].scheduleBuild(now, buildContext, callbackfn);
     }
 
-    public async scheduleBuildFromOctokit(pr: number, now: boolean = false, octokit: Octokit, owner: string, repo: string, callbackfn?: (buildBranch: string) => void) {
+    public async scheduleBuildFromOctokit(
+        pr: number,
+        now = false,
+        octokit: Octokit,
+        owner: string,
+        repo: string,
+        callbackfn?: (buildBranch: string) => void,
+    ) {
         this.managePR(pr);
         this.PRs[pr].scheduleBuildFromOctokit(now, octokit, owner, repo, callbackfn);
     }

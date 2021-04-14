@@ -1,6 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { Context } from 'probot';
 import { PRInfo } from './index';
+import { graphql } from '@octokit/graphql';
 /**
  * Generates a random hex value.
  *
@@ -606,3 +607,10 @@ export declare function ensureLabelExists(context: Context, { name, color }: Rec
 }, 201>>;
 export declare function labelExists(context: Context, name: string): Promise<boolean>;
 export declare function hasPushAccess(context: Context, params: any): Promise<boolean>;
+/**
+ * Get a list of Pull requests
+ *
+ * @param octokit A GrapQL octokit instance
+ * @returns {PRInfo[]} An array of pull requests with basic information about them
+ */
+export declare function getPRs(octokit: typeof graphql): Promise<PRInfo[]>;
