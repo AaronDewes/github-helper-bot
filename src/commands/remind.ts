@@ -29,7 +29,7 @@ async function postReminder(context: Context, text: string, author: string, targ
  * @param context The Probot context
  * @param args The arguments to the /remind command
  */
-export default async function remind(context: Context, args: string) {
+export async function remind(context: Context, args: string) {
     const reminder: parsedReminder = parseReminder(`remind ${args}`, "");
 
     if (reminder) {
@@ -50,4 +50,13 @@ export default async function remind(context: Context, args: string) {
     }
 
     setTimeout(postReminder, +(reminder.when) - +(Date.now()), context, reminder.what, context.payload.sender.login, reminder.who);
+}
+
+export default class Command {
+    static helptext() {
+        return "Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be \"me\" or any GitHub user (like @octocat).";
+    }
+    static run(context: Context, args: string, _isPR: boolean) {
+        remind(context, args);
+    }
 }

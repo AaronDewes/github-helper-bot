@@ -10,7 +10,7 @@ import { PRInfo } from './index';
  */
 export declare function randomHash(count: number): string;
 /**
- * Checks if a repo exists on GitHub
+ * Checks if a repo exists on GitHub (using a Probot context)
  *
  * @param context The Probot context
  * @param {string} owner The owner of the repo to check
@@ -18,9 +18,31 @@ export declare function randomHash(count: number): string;
  * @returns {string} A randomly generated string
  */
 export declare function repoExists(context: Context, owner: string, repo: string): Promise<boolean>;
+/**
+ * Checks if a repo exists on GitHub (using Octokit)
+ *
+ * @param octokit An octokit instance
+ * @param {string} owner The owner of the repo to check
+ * @param {string} repo The name of the repo to check
+ * @returns {string} A randomly generated string
+ */
 export declare function repoExistsOctokit(octokit: Octokit, owner: string, repo: string): Promise<boolean>;
+/**
+ * Compares two lists of PRs and returns the PRs that wer added/changed from list1 to list2
+ *
+ * @param list1 The first list of PRs
+ * @param list2 The second list of PRs
+ * @returns {string} All changed/added PRs between list1 and list2
+ */
 export declare function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<PRInfo[]>;
-export declare function addLabel(context: Context, issue: any, name: string, color: string): Promise<void>;
+/**
+ * Adds a label to a GitHub repo
+ *
+ * @param context The Probot context
+ * @param {string} name The name of the label
+ * @param {string} color The color that the label should have if it's not present (hex string)
+ */
+export declare function addLabel(context: Context, name: string, color: string): Promise<void>;
 export declare function closeIssue(context: Context, params: any): Promise<import("@octokit/types").OctokitResponse<{
     id: number;
     node_id: string;

@@ -1,6 +1,5 @@
 import {Probot, Context} from 'probot';
 import {Repo} from './pullrequest';
-import remind from './remind';
 const { createProbotAuth } = require("octokit-auth-probot");
 import { graphql, GraphQlQueryResponseData } from "@octokit/graphql";
 import { Octokit } from "@octokit/rest";
@@ -8,9 +7,10 @@ import { Octokit } from "@octokit/rest";
 import { config, composeConfigGet } from '@probot/octokit-plugin-config';
 import jp from 'jsonpath';
 
-import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, labelExists } from './helpers';
+import { comparePRList, comment, closeIssue, addLabel, hasPushAccess } from './helpers';
 import unfurl from './unfurl/unfurl'
 import defaultConfig from './default-config';
+import handleCommand from './commands';
 
 // Check for new PRs every PR_FETCH_TIME minutes
 const PR_FETCH_TIME = 5;
@@ -131,48 +131,12 @@ async function getPRs(): Promise<PRInfo[]> {
   return result;
 }
 
-async function build(context: Context, isPR: boolean) {
+export async function build(context: Context) {
     if(!managedRepos[`${context.repo().owner}-${context.repo().repo}`]) {
       managedRepos[`${context.repo().owner}-${context.repo().repo}`] = new Repo(context.repo().owner, context.repo().repo);
     }
     const PR = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    if(!isPR) {
-        context.octokit.issues.createComment({...context.issue(), body: "This command only works on pull requests." });
-    }
     PR.scheduleBuild(context.issue().issue_number, true, context);
-}
-
-async function helpText(context: Context) {
-    if(context.payload.sender.login == "AaronDewes") {
-        context.octokit.issues.createComment({...context.issue(), body: `@AaronDewes you know this hasn't been implemented yet, add it!` });
-    }
-    if(context.payload.sender.login == "louneskmt") {
-        context.octokit.issues.createComment({...context.issue(), body: `@louneskmt @AaronDewes didn't implement this yet. You can tell everyone in the podcast about this.\nAnd Pretzel will win in Baguette vs. Pretzel!` });
-    }
-    context.octokit.issues.createComment({...context.issue(), body: `:wave: ${context.payload.sender.login} Thank you for your interest in this bot!\nUnfortunately, there is no help text yet, or the command you sent hasn't been implemented yet. @AaronDewes should add one, but he didn't do it yet.` });
-}
-
-async function handleCommand(cmd: string, args: string, context: Context, isPR: boolean) {
-    switch(cmd) {
-        case "build":
-            build(context, isPR)
-            return;
-        case "remind":
-            remind(context, args)
-            return;
-        case "help":
-            helpText(context)
-            return;
-        case "label":
-          if(labelExists(context, args)) {
-            addLabel(context, context.issue(), "args", "");
-          } else {
-            context.octokit.issues.createComment({...context.issue(), body: `This label could not be found.` });
-          }
-          return;
-        default:
-            return;
-    }
 }
 
 
@@ -260,7 +224,7 @@ module.exports = (app: Probot) => {
       app.log.debug(`Close PR ${htmlUrl}`);
       await comment(context, context.issue({body: config.commentBody}));
       if (config.addLabel) {
-        await addLabel(context, context.issue(), config.labelName, config.labelColor);
+        await addLabel(context, config.labelName, config.labelColor);
       }
       return closeIssue(context, context.issue());
     })

@@ -1922,6 +1922,7 @@ __metadata:
     "@octokit/core": ^3.4.0
     "@octokit/graphql": ^4.6.1
     "@octokit/rest": ^18.5.2
+    "@octokit/types": ^6.13.0
     "@probot/octokit-plugin-config": ^1.0.3
     "@types/jsdom": ^16.2.10
     "@types/jsonpath": ^0.2.0

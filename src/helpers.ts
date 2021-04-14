@@ -20,9 +20,8 @@ export function randomHash(count: number): string {
     }
 }
 
-
 /**
- * Checks if a repo exists on GitHub
+ * Checks if a repo exists on GitHub (using a Probot context)
  * 
  * @param context The Probot context
  * @param {string} owner The owner of the repo to check
@@ -46,6 +45,14 @@ export async function repoExists(context: Context, owner: string, repo: string) 
 }
 
 
+/**
+ * Checks if a repo exists on GitHub (using Octokit)
+ * 
+ * @param octokit An octokit instance
+ * @param {string} owner The owner of the repo to check
+ * @param {string} repo The name of the repo to check
+ * @returns {string} A randomly generated string
+ */
 export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: string) {
     try {
         await octokit.repos.get({
@@ -62,6 +69,13 @@ export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: s
     return true;
 }
 
+/**
+ * Compares two lists of PRs and returns the PRs that wer added/changed from list1 to list2
+ * 
+ * @param list1 The first list of PRs
+ * @param list2 The second list of PRs
+ * @returns {string} All changed/added PRs between list1 and list2
+ */
 export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<PRInfo[]> {
   let resultingPRs: PRInfo[] = [];
   list2.forEach((pr, number) => {
@@ -77,13 +91,16 @@ export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<P
 }
 
 
-
-
-export async function addLabel(context: Context, issue: any, name: string, color: string) {
-  const params = Object.assign({}, issue, {labels: [name]})
-
+/**
+ * Adds a label to a GitHub repo
+ * 
+ * @param context The Probot context
+ * @param {string} name The name of the label
+ * @param {string} color The color that the label should have if it's not present (hex string)
+ */
+export async function addLabel(context: Context, name: string, color: string) {
   await ensureLabelExists(context, {name, color})
-  await context.octokit.issues.addLabels(params);
+  await context.octokit.issues.addLabels({...context.issue(), labels: [name]});
 }
 
 export async function closeIssue(context: Context, params: any) {
