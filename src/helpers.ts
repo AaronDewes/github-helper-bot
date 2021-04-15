@@ -35,11 +35,7 @@ export async function repoExists(context: Context, owner: string, repo: string):
             repo,
         });
     } catch (error) {
-        if (error.status === 404) {
-            return false;
-        } else {
-            return false;
-        }
+        return false;
     }
     return true;
 }
@@ -59,11 +55,7 @@ export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: s
             repo,
         });
     } catch (error) {
-        if (error.status === 404) {
-            return false;
-        } else {
-            return false;
-        }
+        return false;
     }
     return true;
 }
