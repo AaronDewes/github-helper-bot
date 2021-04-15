@@ -862,7 +862,7 @@
         "affectsGlobalScope": false
       },
       "../src/pullrequest.ts": {
-        "version": "c9c86742063d8ca9e59ef55efad3f4b35a899a469afefabef0d08efa825e1e74",
+        "version": "1c6c5523022306af8a8b92e333ea5216a29c30fa7316c7c69a4ea4ae9f3e8913",
         "signature": "cfc030720e129c3fb3e6f23d6e45874f29a574ed88d17b0516fdb5f662425c72",
         "affectsGlobalScope": false
       },
@@ -1092,12 +1092,12 @@
         "affectsGlobalScope": true
       },
       "../src/unfurl/get-links.ts": {
-        "version": "3b255c057702ed22ed8c15ca8723c7811f62fc9146f86c8d6fb192eb9a287d20",
+        "version": "4ff9dd04cbe15f5c09d54c401e9e32a6dd00a1ca9e1f4ae5f7c545d4d54eb3a4",
         "signature": "6d6a339761dda6e00f40033b6fa8de444992914b134d7c98c3ff0a9f7811e93a",
         "affectsGlobalScope": false
       },
       "../src/unfurl/unfurl.ts": {
-        "version": "31f0c4ef91297d583989a151c8eda18704e4a25ce53b9eda1ce7aaaf6760f5ac",
+        "version": "2f867f06ded103ebd00f930e648711332f918aea8ff3578981ec905cf9de7a9f",
         "signature": "bffef5b1364875e9166d6233fbe844c21713a613ff2c3c9168b28673db84d5f4",
         "affectsGlobalScope": false
       },
@@ -1132,27 +1132,37 @@
         "affectsGlobalScope": false
       },
       "../src/commands/help.ts": {
-        "version": "c93e55470be171910dd2fc958079e5621d2add1825dcded3c3271dda2cffb398",
+        "version": "766b0dfe6f098399cef6374e2e89f60b96768bc61514aec4887aab92e5f054b1",
         "signature": "4c1816d29a000662a60a232b6300ed6cd8b1ccca9a90e7465b3739c8b05eae10",
         "affectsGlobalScope": false
       },
       "../src/commands/index.ts": {
-        "version": "93d4c677170cc80964d9a57a21aa99e05ff147a8ff85aa2d2d249ad61038516e",
+        "version": "21516bd5bd90fee2e72842fe0d1024014b2d38c885c961f99f52104853b1c6ca",
         "signature": "3287170eebc8e10cf814561320f2acc43af3eb55316096a4d11dd9fedbbf3f94",
         "affectsGlobalScope": false
       },
+      "../.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/types/index.d.ts": {
+        "version": "c9ae0b351a07b52f29a28e869d8c7c8d29743bbb5eeddc7c0b5b2a69a2450528",
+        "signature": "c9ae0b351a07b52f29a28e869d8c7c8d29743bbb5eeddc7c0b5b2a69a2450528",
+        "affectsGlobalScope": false
+      },
+      "../src/consts.ts": {
+        "version": "dafa5b2b9591aea1cf92978543bea1da44270cfcf437bd9f3bc662ecf655c868",
+        "signature": "1e53d3906740ef6dcf2c651c708cc8f9449e90e04ea9e6054f9eda616c3dd301",
+        "affectsGlobalScope": false
+      },
       "../src/index.ts": {
-        "version": "b41dea536f2aceebd0719f87ecc149542add20ec69765c8462be951a109669e8",
+        "version": "8febe56582dfe8e9fb5722f767a9237c7e07967a2508abd2081dd15bc4945f94",
         "signature": "a7ac069d0d4c8970e6c58a74e15b2998ed4b6192909eba5b4ae9546d75ca383b",
         "affectsGlobalScope": false
       },
       "../src/helpers.ts": {
-        "version": "09e1d1306fc606f7b5774578128037097009347efe7de88a7947274562a6d7eb",
-        "signature": "a9dcd90eb1ac2281e20f40a62b61fc3138bce44c292aed6de1443f5007325621",
+        "version": "11a148213c5a25a128e5f115cef5a4b1df8e3875a19e75b77649e391b1712040",
+        "signature": "69089539263b8633cc3084a3605b3006c5ceb07ca37aeb0dd5076128da88c331",
         "affectsGlobalScope": false
       },
       "../src/builder.ts": {
-        "version": "7fa670fd280a965f75e145d12a32d30026189b4db99aae289dc693a7c1131a37",
+        "version": "ab9114f79ce4e928a6db0e5fcaf8c4b991e94a7c442b86733416148dbb93971a",
         "signature": "96658cd80b04f03d918a5c6732d46d370c00c7fba51c6f8a1c6bb07548bc6be5",
         "affectsGlobalScope": false
       },
@@ -1181,6 +1191,7 @@
       "typeRoots": [
         "../src/types"
       ],
+      "watch": true,
       "configFilePath": "../tsconfig.json"
     },
     "referencedMap": {
@@ -2470,6 +2481,13 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
+      "../.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/types/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
+        "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/index.d.ts"
+      ],
       "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
@@ -2893,6 +2911,7 @@
         "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts",
         "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
+        "../src/consts.ts",
         "../src/helpers.ts"
       ],
       "../src/commands/all.ts": [
@@ -2956,6 +2975,13 @@
         "../src/commands/baseCommand.ts",
         "../src/types/parse-reminder/index.d.ts"
       ],
+      "../src/consts.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
+        "../.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/types/index.d.ts"
+      ],
       "../src/default-config.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
@@ -2984,6 +3010,7 @@
         "../.yarn/cache/@types-jsonpath-npm-0.2.0-7e705d9978-4862629883.zip/node_modules/@types/jsonpath/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
         "../src/commands/index.ts",
+        "../src/consts.ts",
         "../src/default-config.ts",
         "../src/helpers.ts",
         "../src/pullrequest.ts",
@@ -3813,6 +3840,13 @@
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts"
       ],
+      "../.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/types/index.d.ts": [
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts3.5/index.d.ts",
+        "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/ts4.0/index.d.ts",
+        "../.yarn/cache/@types-node-npm-14.14.37-6783f920bd-5e2d9baf75.zip/node_modules/@types/node/index.d.ts"
+      ],
       "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts": [
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/base.d.ts",
         "../.yarn/cache/@types-jsdom-npm-16.2.10-763d598583-9e39f1d2d0.zip/node_modules/@types/jsdom/index.d.ts",
@@ -3938,7 +3972,6 @@
       "../src/helpers.ts": [
         "../.yarn/cache/@octokit-graphql-npm-4.6.1-b0d2b63384-bcac6e3d90.zip/node_modules/@octokit/graphql/dist-types/index.d.ts",
         "../.yarn/cache/@octokit-rest-npm-18.5.2-51dcff47d9-b6c8ee91fb.zip/node_modules/@octokit/rest/dist-types/index.d.ts",
-        "../.yarn/cache/@octokit-types-npm-6.13.0-df1213cae5-20e7f159be.zip/node_modules/@octokit/types/dist-types/index.d.ts",
         "../.yarn/cache/probot-npm-11.1.0-42b55eda99-1321ad87ee.zip/node_modules/probot/lib/index.d.ts",
         "../src/index.ts"
       ],
@@ -4115,6 +4148,7 @@
       "../.yarn/cache/@types-tough-cookie-npm-4.0.0-c29cd799b9-5a0cccc6d0.zip/node_modules/@types/tough-cookie/index.d.ts",
       "../.yarn/cache/before-after-hook-npm-2.2.1-0eb703f70c-697c0ac2c8.zip/node_modules/before-after-hook/index.d.ts",
       "../.yarn/cache/deepmerge-npm-4.2.2-112165ced2-85abf8e004.zip/node_modules/deepmerge/index.d.ts",
+      "../.yarn/cache/dotenv-npm-8.2.0-6b21df4d37-16cb89cbd7.zip/node_modules/dotenv/types/index.d.ts",
       "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/http/node/index.d.ts",
       "../.yarn/cache/isomorphic-git-npm-1.8.2-e036e167e3-9a6fef38e0.zip/node_modules/isomorphic-git/index.d.ts",
       "../.yarn/cache/probot-attachments-npm-1.0.1-1c6a498d61-e4c3f67e49.zip/node_modules/probot-attachments/index.d.ts",
@@ -4184,6 +4218,7 @@
       "../src/commands/index.ts",
       "../src/commands/label.ts",
       "../src/commands/remind.ts",
+      "../src/consts.ts",
       "../src/default-config.ts",
       "../src/helpers.ts",
       "../src/index.ts",

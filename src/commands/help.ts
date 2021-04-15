@@ -1,7 +1,7 @@
 import { Context } from 'probot';
 import commands from './all';
 
-function generateTable() {
+function generateTable(): string {
     let table = '| command | description                     |';
     table += '|---------|---------------------------------|';
     for (const command in commands) {
@@ -9,7 +9,7 @@ function generateTable() {
     }
     return table;
 }
-export default function helpText(context: Context) {
+export default function helpText(context: Context): void {
     if (context.payload.sender.login == 'AaronDewes') {
         context.octokit.issues.createComment({
             ...context.issue(),

@@ -4,13 +4,14 @@ import { createProbotAuth } from 'octokit-auth-probot';
 import { graphql } from '@octokit/graphql';
 import { Octokit } from '@octokit/rest';
 // @ts-ignore
-import { config, composeConfigGet } from '@probot/octokit-plugin-config';
+import { config, composeConfigGet } from '@probot/octokit-plugin-config'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import jp from 'jsonpath';
 
 import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
 import defaultConfig from './default-config';
 import handleCommand from './commands';
+import { allowedRepoOwners, buildOrg } from './consts';
 
 // Check for new PRs every PR_FETCH_TIME minutes
 const PR_FETCH_TIME = 5;
@@ -39,36 +40,34 @@ function getPermissionDeniedError(username: string) {
 You tried to use me in your own repositories or organization (@${username}).
 I can only be used on authorized repos and not everywhere.
 My source code is public, so you can host me myself if you like me.
-Check [this repo](https://github.com/AaronDewes/UmbrelBot-v2) to view it.
+Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 `;
 }
 
-export async function build(context: Context) {
+export async function build(context: Context): Promise<void> {
     if (!managedRepos[`${context.repo().owner}-${context.repo().repo}`]) {
         managedRepos[`${context.repo().owner}-${context.repo().repo}`] = new Repo(
             context.repo().owner,
             context.repo().repo,
         );
     }
+    const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
     const PR = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    PR.scheduleBuild(context.issue().issue_number, true, context);
+    PR.scheduleBuild(context.issue().issue_number, true, context, async (buildBranch) => {
+        const comment = await ProbotREST.issues.createComment({
+            owner: context.repo().owner,
+            repo: context.repo().repo,
+            issue_number: context.pullRequest().pull_number,
+            body: `Built image to ${buildOrg}/${context.repo().repo}:${buildBranch}.`,
+        });
+        repo.deleteOldComments(context.pullRequest().pull_number, context);
+        repo.addComment(context.pullRequest().pull_number, comment.data.id);
+    });
 }
 
 module.exports = (app: Probot) => {
     /* Parse comments */
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
-        /* Validate repository owner
-         * Authorize the Umbrel team to use the Bot in their own repos
-         * Probably never useful, but I'll allow it anyway
-         */
-        const allowedRepoOwners = [
-            'getumbrel',
-            'UmbrelBuilds',
-            'AaronDewes',
-            'louneskmt',
-            'lukechilds',
-            'mayankchhabra',
-        ];
         if (!allowedRepoOwners.includes(context.issue().owner)) {
             context.octokit.issues.createComment({
                 ...context.issue(),
@@ -132,7 +131,7 @@ module.exports = (app: Probot) => {
         const data = Object.assign({ has_push_access: canPush }, context.payload);
 
         if (
-            !config.filters.every((filter: any, i: number) => {
+            !config.filters.every((filter: string, i: number) => {
                 try {
                     if (jp.query([data], `$[?(${filter})]`).length > 0) {
                         app.log.info(`Filter "${filter}" matched the PR ✅ [${i + 1} of ${config.filters.length}]`);
@@ -146,7 +145,7 @@ module.exports = (app: Probot) => {
         )
             return;
 
-        app.log.debug(`Close PR ${htmlUrl}`);
+        app.log.debug(`Closing PR ${htmlUrl}`);
         await comment(context, context.issue({ body: config.commentBody }));
         if (config.addLabel) {
             await addLabel(context, config.labelName, config.labelColor);
@@ -154,7 +153,13 @@ module.exports = (app: Probot) => {
         return closeIssue(context, context.issue());
     });
 
-    /* Check for new PRs every 5min */
+    app.on(['pull_request.closed', 'pull_request.merged'], async (context) => {
+        if (managedRepos[`getumbrel-${context.pullRequest().repo}`]) {
+            managedRepos[`getumbrel-${context.pullRequest().repo}`].stopManagingPR(context.pullRequest().pull_number);
+        }
+    });
+
+    /* Check for new/changed PRs every 5min */
     setInterval(async () => {
         const lastOpenPRs = openPRs;
         openPRs = await getPRs(ProbotGraphQL);
@@ -174,9 +179,10 @@ module.exports = (app: Probot) => {
                         owner: 'getumbrel',
                         repo: pr.repo,
                         issue_number: pr.number,
-                        body: `Built image to umbrelbuilds/${pr.repo}:${buildBranch}.`,
+                        body: `Built image to ${buildOrg}/${pr.repo}:${buildBranch}.`,
                     });
-                    comment.data.id;
+                    managedRepos[`getumbrel-${pr.repo}`].deleteOldCommentsFromOctokit(pr.number, ProbotREST);
+                    managedRepos[`getumbrel-${pr.repo}`].addComment(pr.number, comment.data.id);
                 },
             );
         });

@@ -6,6 +6,7 @@ import fs from 'fs';
 import { Octokit } from '@octokit/rest';
 
 import { randomHash, repoExists, repoExistsOctokit } from './helpers';
+import { buildOrg } from './consts';
 
 /**
  * Clones a PR, merges it with the current master, and pushes it to GitHub
@@ -16,10 +17,11 @@ import { randomHash, repoExists, repoExistsOctokit } from './helpers';
 export default async function build(context: Context, callbackfn?: (buildBranch: string) => void): Promise<boolean> {
     const id = randomHash(10);
     const prInfo = await context.octokit.pulls.get(context.pullRequest());
-    if (!repoExists(context, 'UmbrelBuilds', prInfo.data.base.repo.name)) {
+    const exists = await repoExists(context, buildOrg, prInfo.data.base.repo.name);
+    if (!exists) {
         return false;
     }
-    const pushURL = (await context.octokit.repos.get({ ...context.repo(), owner: 'UmbrelBuilds' })).data.clone_url;
+    const pushURL = (await context.octokit.repos.get({ ...context.repo(), owner: buildOrg })).data.clone_url;
     const buildBranch = `pr-${context.pullRequest().pull_number}-${
         prInfo.data.head.ref
     }-${prInfo.data.head.sha.substring(0, 7)}`;
@@ -53,10 +55,12 @@ export async function buildOctokit(
 ): Promise<boolean> {
     const id = randomHash(10);
     const prInfo = await octokit.pulls.get({ pull_number: pr, owner, repo });
-    if (!repoExistsOctokit(octokit, 'UmbrelBuilds', prInfo.data.base.repo.name)) {
+    const exists = await repoExistsOctokit(octokit, buildOrg, prInfo.data.base.repo.name);
+    if (!exists) {
+        console.log("Repo doesn't exist");
         return false;
     }
-    const pushURL = (await octokit.repos.get({ repo, owner: 'UmbrelBuilds' })).data.clone_url;
+    const pushURL = (await octokit.repos.get({ repo, owner: buildOrg })).data.clone_url;
     const buildBranch = `pr-${pr}-${prInfo.data.head.ref}-${prInfo.data.head.sha.substring(0, 7)}`;
     const folderPath = path.resolve('./private', id);
     fs.mkdirSync(folderPath, {

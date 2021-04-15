@@ -28,7 +28,7 @@ export function randomHash(count: number): string {
  * @param {string} repo The name of the repo to check
  * @returns {string} A randomly generated string
  */
-export async function repoExists(context: Context, owner: string, repo: string) {
+export async function repoExists(context: Context, owner: string, repo: string): Promise<boolean> {
     try {
         await context.octokit.repos.get({
             owner,
@@ -52,7 +52,7 @@ export async function repoExists(context: Context, owner: string, repo: string) 
  * @param {string} repo The name of the repo to check
  * @returns {string} A randomly generated string
  */
-export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: string) {
+export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: string): Promise<boolean> {
     try {
         await octokit.repos.get({
             owner,
@@ -96,30 +96,30 @@ export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<P
  * @param {string} name The name of the label
  * @param {string} color The color that the label should have if it's not present (hex string)
  */
-export async function addLabel(context: Context, name: string, color: string) {
+export async function addLabel(context: Context, name: string, color: string): Promise<void> {
     await ensureLabelExists(context, { name, color });
     await context.octokit.issues.addLabels({ ...context.issue(), labels: [name] });
 }
 
-export async function closeIssue(context: Context, params: any) {
+export async function closeIssue(context: Context, params: any): Promise<void> {
     const closeParams = Object.assign({}, params, { state: 'closed' });
 
-    return context.octokit.issues.update(closeParams);
+    context.octokit.issues.update(closeParams);
 }
 
-export async function comment(context: Context, params: any) {
-    return context.octokit.issues.createComment(params);
+export async function comment(context: Context, params: any): Promise<void> {
+    context.octokit.issues.createComment(params);
 }
 
-export async function ensureLabelExists(context: Context, { name, color }: Record<string, string>) {
+export async function ensureLabelExists(context: Context, { name, color }: Record<string, string>): Promise<void> {
     try {
-        return await context.octokit.issues.getLabel(context.repo({ name }));
+        await context.octokit.issues.getLabel(context.repo({ name }));
     } catch (e) {
-        return context.octokit.issues.createLabel({ ...context.repo(), name, color });
+        context.octokit.issues.createLabel({ ...context.repo(), name, color });
     }
 }
 
-export async function labelExists(context: Context, name: string) {
+export async function labelExists(context: Context, name: string): Promise<boolean> {
     try {
         await context.octokit.issues.getLabel(context.repo({ name }));
         return true;
@@ -128,7 +128,7 @@ export async function labelExists(context: Context, name: string) {
     }
 }
 
-export async function hasPushAccess(context: Context, params: any) {
+export async function hasPushAccess(context: Context, params: any): Promise<boolean> {
     const permissionResponse = await context.octokit.repos.getCollaboratorPermissionLevel(params);
     const level = permissionResponse.data.permission;
 

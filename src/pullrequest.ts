@@ -25,7 +25,11 @@ export default class PullRequest {
      * @param {boolean} now true if the build should be ran now,
      * false or in 5 minutes (if no new one gets triggered in that time)
      */
-    public async scheduleBuild(now = false, buildContext: Context, callbackfn?: (buildBranch: string) => void) {
+    public async scheduleBuild(
+        now = false,
+        buildContext: Context,
+        callbackfn?: (buildBranch: string) => void,
+    ): Promise<void> {
         if (now) {
             if (typeof this.timeoutID == 'number') {
                 clearTimeout(<number>this.timeoutID);
@@ -47,7 +51,7 @@ export default class PullRequest {
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
-    ) {
+    ): Promise<void> {
         if (now) {
             if (typeof this.timeoutID == 'number') {
                 clearTimeout(<number>this.timeoutID);
@@ -58,11 +62,11 @@ export default class PullRequest {
         this.timeoutID = setTimeout(buildOctokit, 5 * 60 * 1000, octokit, this.number, owner, repo, callbackfn);
     }
 
-    public async addComment(id: number) {
+    public async addComment(id: number): Promise<void> {
         this.olderComments?.push(id);
     }
 
-    public async deleteOldComments(context: Context) {
+    public async deleteOldComments(context: Context): Promise<void> {
         this.olderComments?.forEach((comment) => {
             context.octokit.issues.deleteComment({
                 ...context.repo(),
@@ -71,7 +75,7 @@ export default class PullRequest {
         });
     }
 
-    public async deleteOldCommentsFromOctokit(octokit: Octokit) {
+    public async deleteOldCommentsFromOctokit(octokit: Octokit): Promise<void> {
         this.olderComments?.forEach((comment) => {
             octokit.issues.deleteComment({
                 owner: this.owner,
@@ -92,14 +96,16 @@ export class Repo {
         this.repo = repo;
     }
 
-    managePR(number: number) {
+    managePR(number: number): void {
         if (!this.PRs[number]) {
             this.PRs[number] = new PullRequest(number, this.owner, this.repo);
         }
     }
 
-    stopManagingPR(number: number) {
-        delete this.PRs[number];
+    stopManagingPR(number: number): void {
+        if (this.PRs[number]) {
+            delete this.PRs[number];
+        }
     }
 
     public async scheduleBuild(
@@ -107,7 +113,7 @@ export class Repo {
         now = false,
         buildContext: Context,
         callbackfn?: (buildBranch: string) => void,
-    ) {
+    ): Promise<void> {
         this.managePR(pr);
         this.PRs[pr].scheduleBuild(now, buildContext, callbackfn);
     }
@@ -119,22 +125,22 @@ export class Repo {
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
-    ) {
+    ): Promise<void> {
         this.managePR(pr);
         this.PRs[pr].scheduleBuildFromOctokit(now, octokit, owner, repo, callbackfn);
     }
 
-    public async addComment(pr: number, id: number) {
+    public async addComment(pr: number, id: number): Promise<void> {
         this.managePR(pr);
         this.PRs[pr].addComment(id);
     }
 
-    public async deleteOldComments(pr: number, context: Context) {
+    public async deleteOldComments(pr: number, context: Context): Promise<void> {
         this.managePR(pr);
         this.PRs[pr].deleteOldComments(context);
     }
 
-    public async deleteOldCommentsFromOctokit(pr: number, octokit: Octokit) {
+    public async deleteOldCommentsFromOctokit(pr: number, octokit: Octokit): Promise<void> {
         this.managePR(pr);
         this.PRs[pr].deleteOldCommentsFromOctokit(octokit);
     }

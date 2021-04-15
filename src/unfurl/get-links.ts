@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-export default function getLinks(html: string) {
+export default function getLinks(html: string): string[] {
     const links: string[] = [];
 
     // Parse the HTML

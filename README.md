@@ -1,22 +1,23 @@
-# Umbrel's GitHub bot (Version 2)
+# GitHub helper bot
 
-This is a GitHub bot for Umbrel, built using probot.
-This is still in development (it hasn't been tested yet) and should not be used for your own projects.
+A bot to make GitHub development much easier, originally developed for Umbrel.
 ## Sources
 
 This bot wouldn't be possible without these amazing projects:
 
-[Probot](https://github.com/probot)
-[probot-unfurl](https://github.com/probot/unfurl/)
-[mistaken-pull-closer](https://github.com/probot/mistaken-pull-closer)
+* [Probot](https://github.com/probot)
+* [probot-unfurl](https://github.com/probot/unfurl/)
+* [mistaken-pull-closer](https://github.com/probot/mistaken-pull-closer)
 
 ... And, of course, every dependency in our dependency tree.
 
 Thanks to everyone who created or helped creating these projects!
 
+Special thanks to [Luke Childs](https://github.com/lukechilds) who provides the server for UmbrelBot and of course provides some packages in the dependency tree (he probably does that for 99% of projects using npm).
+
 ### What this bot does
 
-This bot has quite a few useful commands that should help you. Just run `/help` to see them.
+This bot can listen for PRs and push them to a seperate GitHub org for building them, remind you of something, close mistaken PRs and more.
 
 ### Current status
 
