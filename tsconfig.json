@@ -18,7 +18,8 @@
         "skipLibCheck": true,
         "typeRoots": [
             "src/types"
-        ]
+        ],
+        "noImplicitOverride": true
     },
     "include": ["src/"],
     "compileOnSave": true

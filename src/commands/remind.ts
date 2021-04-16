@@ -69,10 +69,8 @@ export async function remind(context: Context, args: string): Promise<void> {
 }
 
 export default class Command extends BaseCommand {
-    static helptext(): string {
-        return 'Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).';
-    }
-    static run(context: Context, args: string, _isPR: boolean): void {
+    static override helptext = 'Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).';
+    static override run(context: Context, args: string, _isPR: boolean): void {
         remind(context, args);
     }
 }
