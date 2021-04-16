@@ -11,7 +11,7 @@ import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } f
 import unfurl from './unfurl/unfurl';
 import { defaultConfig, UmbrelBotConfig } from './config';
 import handleCommand from './commands';
-import { allowedRepoOwners, buildOrg } from './consts';
+import { allowedRepoOwners, buildOrg, configVersion } from './consts';
 
 // Check for new PRs every PR_FETCH_TIME minutes
 const PR_FETCH_TIME = 5;
@@ -45,11 +45,17 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 }
 
 async function getConfig(context: Context): Promise<UmbrelBotConfig> {
-    const userConfig =
+    const userConfig: UmbrelBotConfig =
         (await ProbotREST.config.get({
             ...context.repo(),
             path: '.github/UmbrelBot.yml',
         })) || {};
+    if (userConfig !== {} && userConfig.version && userConfig.version !== configVersion) {
+        context.octokit.issues.createComment({
+            ...context.issue(),
+            body: `This repo uses the configuration version '${userConfig.version}' which is not supported by this bot, please use version ${configVersion}.`,
+        });
+    }
     return {
         ...defaultConfig,
         ...userConfig,
@@ -87,7 +93,7 @@ module.exports = (app: Probot) => {
             });
         }
         const config = await getConfig(context);
-        if (config.blocklist.includes(context.payload.sender.login)) {
+        if (config.blocklist && config.blocklist.includes(context.payload.sender.login)) {
             console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;
         }
@@ -128,12 +134,12 @@ module.exports = (app: Probot) => {
         const canPush = await hasPushAccess(context, context.repo({ username }));
         const data = Object.assign({ has_push_access: canPush }, context.payload);
         const config = await getConfig(context);
-
+        const filters = config.invalidPRConfig?.filters || defaultConfig.invalidPRConfig.filters;
         if (
-            !config.filters.every((filter: string, i: number) => {
+            !filters.every((filter: string, i: number) => {
                 try {
                     if (jp.query([data], `$[?(${filter})]`).length > 0) {
-                        app.log.info(`Filter "${filter}" matched the PR ✅ [${i + 1} of ${config.filters.length}]`);
+                        app.log.info(`Filter "${filter}" matched the PR ✅ [${i + 1} of ${filters.length}]`);
                         return true;
                     }
                 } catch (e) {
@@ -145,9 +151,18 @@ module.exports = (app: Probot) => {
             return;
 
         app.log.debug(`Closing PR ${htmlUrl}`);
-        await comment(context, context.issue({ body: config.commentBody }));
-        if (config.addLabel) {
-            await addLabel(context, config.labelName, config.labelColor);
+        await comment(
+            context,
+            context.issue({
+                body: config.invalidPRConfig?.commentBody || defaultConfig.invalidPRConfig.commentBody,
+            }),
+        );
+        if (config.invalidPRConfig?.addLabel) {
+            await addLabel(
+                context,
+                config.invalidPRConfig.labelName || defaultConfig.invalidPRConfig.labelName,
+                config.invalidPRConfig.labelColor || defaultConfig.invalidPRConfig.labelColor,
+            );
         }
         return closeIssue(context, context.issue());
     });

@@ -14,12 +14,12 @@ import { buildOrg } from './consts';
  * @param context The Probot context
  * @returns {Promise<boolean>} Success status
  */
-export default async function build(context: Context, callbackfn?: (buildBranch: string) => void): Promise<boolean> {
+export default async function build(context: Context, callbackfn?: (buildBranch: string) => void): Promise<void> {
     const id = randomHash(10);
     const prInfo = await context.octokit.pulls.get(context.pullRequest());
     const exists = await repoExists(context, buildOrg, prInfo.data.base.repo.name);
     if (!exists) {
-        return false;
+        console.warn(`Tried to run a build in '${prInfo.data.base.repo.name}', but it doesn't exist in '${buildOrg}!'`);
     }
     const pushURL = (await context.octokit.repos.get({ ...context.repo(), owner: buildOrg })).data.clone_url;
     const buildBranch = `pr-${context.pullRequest().pull_number}-${
@@ -43,7 +43,6 @@ export default async function build(context: Context, callbackfn?: (buildBranch:
         ref: buildBranch,
     });
     typeof callbackfn === 'function' && callbackfn(buildBranch);
-    return true;
 }
 
 export async function buildOctokit(
@@ -52,13 +51,13 @@ export async function buildOctokit(
     owner: string,
     repo: string,
     callbackfn?: (buildBranch: string) => void,
-): Promise<boolean> {
+): Promise<void> {
     const id = randomHash(10);
     const prInfo = await octokit.pulls.get({ pull_number: pr, owner, repo });
     const exists = await repoExistsOctokit(octokit, buildOrg, prInfo.data.base.repo.name);
     if (!exists) {
-        console.warn(`Tried to run a build in '${prInfo.data.base.repo.name}', but it doesn't exist in '${buildOrg}'`);
-        return false;
+        console.warn(`Tried to run a build in '${prInfo.data.base.repo.name}', but it doesn't exist in '${buildOrg}!'`);
+        return;
     }
     const pushURL = (await octokit.repos.get({ repo, owner: buildOrg })).data.clone_url;
     const buildBranch = `pr-${pr}-${prInfo.data.head.ref}-${prInfo.data.head.sha.substring(0, 7)}`;
@@ -80,5 +79,4 @@ export async function buildOctokit(
         ref: buildBranch,
     });
     typeof callbackfn === 'function' && callbackfn(buildBranch);
-    return true;
 }
