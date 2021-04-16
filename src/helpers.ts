@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Octokit } from '@octokit/rest';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { Context } from 'probot';
 import { PRInfo } from './index';
 import { graphql, GraphQlQueryResponseData } from '@octokit/graphql';
@@ -93,13 +93,19 @@ export async function addLabel(context: Context, name: string, color: string): P
     await context.octokit.issues.addLabels({ ...context.issue(), labels: [name] });
 }
 
-export async function closeIssue(context: Context, params: any): Promise<void> {
-    const closeParams = Object.assign({}, params, { state: 'closed' });
+export async function closeIssue(
+    context: Context,
+    params: RestEndpointMethodTypes['issues']['update']['parameters'],
+): Promise<void> {
+    const closeParams: RestEndpointMethodTypes['issues']['update']['parameters'] = { ...params, state: 'closed' };
 
     context.octokit.issues.update(closeParams);
 }
 
-export async function comment(context: Context, params: any): Promise<void> {
+export async function comment(
+    context: Context,
+    params: RestEndpointMethodTypes['issues']['createComment']['parameters'],
+): Promise<void> {
     context.octokit.issues.createComment(params);
 }
 
@@ -120,7 +126,10 @@ export async function labelExists(context: Context, name: string): Promise<boole
     }
 }
 
-export async function hasPushAccess(context: Context, params: any): Promise<boolean> {
+export async function hasPushAccess(
+    context: Context,
+    params: RestEndpointMethodTypes['repos']['getCollaboratorPermissionLevel']['parameters'],
+): Promise<boolean> {
     const permissionResponse = await context.octokit.repos.getCollaboratorPermissionLevel(params);
     const level = permissionResponse.data.permission;
 

@@ -9,7 +9,7 @@ import jp from 'jsonpath';
 
 import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
-import defaultConfig from './default-config';
+import { defaultConfig, UmbrelBotConfig } from './config';
 import handleCommand from './commands';
 import { allowedRepoOwners, buildOrg } from './consts';
 
@@ -44,6 +44,18 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 `;
 }
 
+async function getConfig(context: Context): Promise<UmbrelBotConfig> {
+    const userConfig =
+        (await ProbotREST.config.get({
+            ...context.repo(),
+            path: '.github/UmbrelBot.yml',
+        })) || {};
+    return {
+        ...defaultConfig,
+        ...userConfig,
+    };
+}
+
 export async function build(context: Context): Promise<void> {
     if (!managedRepos[`${context.repo().owner}-${context.repo().repo}`]) {
         managedRepos[`${context.repo().owner}-${context.repo().repo}`] = new Repo(
@@ -74,14 +86,9 @@ module.exports = (app: Probot) => {
                 body: getPermissionDeniedError(context.issue().owner),
             });
         }
-
-        const { config } = await ProbotREST.config.get({
-            ...context.repo(),
-            path: '.github/UmbrelBot.yml',
-        });
-
-        if (config.blacklist && config.blacklist.includes(context.payload.sender)) {
-            console.warn(`Blacklisted user @${context.payload.sender} tried to use the bot.`);
+        const config = await getConfig(context);
+        if (config.blocklist.includes(context.payload.sender.login)) {
+            console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;
         }
 
@@ -117,18 +124,10 @@ module.exports = (app: Probot) => {
     app.on('pull_request.opened', async (context) => {
         const htmlUrl = context.payload.pull_request.html_url;
         app.log.debug(`Inspecting: ${htmlUrl}`);
-        const userConfig =
-            (await ProbotREST.config.get({
-                ...context.repo(),
-                path: '.github/UmbrelBot.yml',
-            })) || {};
-        const config = {
-            ...defaultConfig,
-            ...userConfig,
-        };
         const username = context.payload.pull_request.user.login;
         const canPush = await hasPushAccess(context, context.repo({ username }));
         const data = Object.assign({ has_push_access: canPush }, context.payload);
+        const config = await getConfig(context);
 
         if (
             !config.filters.every((filter: string, i: number) => {

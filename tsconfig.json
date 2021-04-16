@@ -4,8 +4,6 @@
         "incremental": true /* Enable incremental compilation */,
         "target": "esnext",
         "module": "commonjs",
-        "declaration": true,
-        "sourceMap": true,
         "outDir": "./lib",
         "strict": true,
         "noUnusedLocals": true,
@@ -19,7 +17,8 @@
         "typeRoots": [
             "src/types"
         ],
-        "noImplicitOverride": true
+        "noImplicitOverride": true,
+        "removeComments": true // JS files are just build assets and shouldn't be read/modified
     },
     "include": ["src/"],
     "compileOnSave": true

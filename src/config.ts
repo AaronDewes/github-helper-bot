@@ -1,4 +1,13 @@
-export default {
+export interface UmbrelBotConfig {
+    filters: string[];
+    commentBody: string;
+    addLabel: boolean;
+    labelName: string;
+    labelColor: string;
+    blocklist: string[];
+}
+
+export const defaultConfig: UmbrelBotConfig = {
     // Filter explanation:
     // 1. PR is from a branch in the local repo.
     // 2. User is not a bot.  If the user is a bot then it was invited to open
@@ -21,4 +30,5 @@ export default {
     addLabel: true,
     labelName: 'invalid',
     labelColor: 'e6e6e6',
+    blocklist: [],
 };

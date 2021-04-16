@@ -57,7 +57,7 @@ export async function buildOctokit(
     const prInfo = await octokit.pulls.get({ pull_number: pr, owner, repo });
     const exists = await repoExistsOctokit(octokit, buildOrg, prInfo.data.base.repo.name);
     if (!exists) {
-        console.log("Repo doesn't exist");
+        console.warn(`Tried to run a build in '${prInfo.data.base.repo.name}', but it doesn't exist in '${buildOrg}'`);
         return false;
     }
     const pushURL = (await octokit.repos.get({ repo, owner: buildOrg })).data.clone_url;
