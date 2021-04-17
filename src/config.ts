@@ -1,11 +1,21 @@
 import { configVersion } from './consts';
 
 export interface InvalidPRConfig {
+    enabled?: boolean;
     filters?: string[];
     commentBody?: string;
     addLabel?: boolean;
     labelName?: string;
     labelColor?: string;
+}
+
+export interface InvalidPRDefaultConfig extends InvalidPRConfig {
+    enabled: boolean;
+    filters: string[];
+    commentBody: string;
+    addLabel: boolean;
+    labelName: string;
+    labelColor: string;
 }
 export interface UmbrelBotConfig {
     version?: number;
@@ -14,13 +24,6 @@ export interface UmbrelBotConfig {
     prFetchMinutes?: number;
 }
 
-export interface InvalidPRDefaultConfig extends InvalidPRConfig {
-    filters: string[];
-    commentBody: string;
-    addLabel: boolean;
-    labelName: string;
-    labelColor: string;
-}
 export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
@@ -53,6 +56,7 @@ export const defaultConfig: UmbrelBotDefaultConfig = {
         addLabel: true,
         labelName: 'invalid',
         labelColor: 'e6e6e6',
+        enabled: true,
     },
     blocklist: [],
     prFetchMinutes: 5,

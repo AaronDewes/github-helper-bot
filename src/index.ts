@@ -164,12 +164,13 @@ module.exports = (app: Probot) => {
     });
 
     app.on('pull_request.opened', async (context) => {
+        const config = await getConfig(context);
+        if (!config.invalidPRConfig?.enabled) return;
         const htmlUrl = context.payload.pull_request.html_url;
         app.log.debug(`Inspecting: ${htmlUrl}`);
         const username = context.payload.pull_request.user.login;
         const canPush = await hasPushAccess(context, context.repo({ username }));
         const data = Object.assign({ has_push_access: canPush }, context.payload);
-        const config = await getConfig(context);
         const filters = config.invalidPRConfig?.filters || defaultConfig.invalidPRConfig.filters;
         if (
             !filters.every((filter: string, i: number) => {

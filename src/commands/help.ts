@@ -5,7 +5,7 @@ function generateTable(): string {
     let table = '| command | description                     |';
     table += '|---------|---------------------------------|';
     for (const command in commands) {
-        table += `|${command}|${commands[command].helptext}|`;
+        table += `| \`/${command}\` |${commands[command].helptext}|`;
     }
     return table;
 }
