@@ -2,7 +2,7 @@
     "compilerOptions": {
         /* Basic Options */
         "incremental": true /* Enable incremental compilation */,
-        "target": "esnext",
+        "target": "es2020",
         "module": "commonjs",
         "outDir": "./lib",
         "strict": true,

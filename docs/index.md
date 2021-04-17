@@ -17,3 +17,4 @@ In the current version, `0.0.1-alpha.3`, it provides the following features:
 - `/label`: This adds a label to the current PR/issue.
 - `/remind`: Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).
 - `/version`: Outputs the current version of this bot.
+- `/appcheck`: Check if all apps used in getumbrel/umbrel are up-to-date.
