@@ -10,18 +10,5 @@ function generateTable(): string {
     return table;
 }
 export default function helpText(context: Context): void {
-    if (context.payload.sender.login == 'AaronDewes') {
-        context.octokit.issues.createComment({
-            ...context.issue(),
-            body: `@AaronDewes You implemented this bot, you should know this.`,
-        });
-    }
-    if (context.payload.sender.login == 'louneskmt') {
-        context.octokit.issues.createComment({ ...context.issue(), body: `@louneskmt I won't help baguettes!` });
-        // Let him wait a bit
-        setTimeout(() => {
-            context.octokit.issues.createComment({ ...context.issue(), body: generateTable() });
-        }, 15 * 1000);
-    }
     context.octokit.issues.createComment({ ...context.issue(), body: generateTable() });
 }

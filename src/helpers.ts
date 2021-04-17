@@ -226,3 +226,21 @@ export async function getPRs(octokit: typeof graphql): Promise<PRInfo[]> {
     });
     return result;
 }
+
+export type genericPRInfo = {
+    number: number;
+    head: {
+        sha: string;
+        ref: string;
+        repo: {
+            clone_url: string;
+        };
+    };
+    base: {
+        ref: string;
+        sha: string;
+        repo: {
+            clone_url: string;
+        };
+    };
+};

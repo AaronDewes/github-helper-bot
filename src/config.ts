@@ -11,6 +11,7 @@ export interface UmbrelBotConfig {
     version?: number;
     invalidPRConfig?: InvalidPRConfig;
     blocklist?: string[];
+    prFetchMinutes?: number;
 }
 
 export interface InvalidPRDefaultConfig extends InvalidPRConfig {
@@ -24,6 +25,7 @@ export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
     blocklist: string[];
+    prFetchMinutes: number;
 }
 
 export const defaultConfig: UmbrelBotDefaultConfig = {
@@ -53,4 +55,5 @@ export const defaultConfig: UmbrelBotDefaultConfig = {
         labelColor: 'e6e6e6',
     },
     blocklist: [],
+    prFetchMinutes: 5,
 };

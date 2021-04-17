@@ -9,12 +9,9 @@ import jp from 'jsonpath';
 
 import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
-import { defaultConfig, UmbrelBotConfig } from './config';
+import { defaultConfig, UmbrelBotConfig, UmbrelBotDefaultConfig } from './config';
 import handleCommand from './commands';
 import { allowedRepoOwners, buildOrg, configVersion } from './consts';
-
-// Check for new PRs every PR_FETCH_TIME minutes
-const PR_FETCH_TIME = 5;
 
 const ProbotGraphQL = graphql.defaults({
     authStrategy: createProbotAuth,
@@ -26,6 +23,8 @@ const ProbotREST = new Octokit({
 
 let managedRepos: Record<string, Repo>;
 let openPRs: PRInfo[];
+let lastConfig: UmbrelBotConfig = defaultConfig;
+let lastInterval: NodeJS.Timeout;
 
 export interface PRInfo {
     number: number;
@@ -56,10 +55,47 @@ async function getConfig(context: Context): Promise<UmbrelBotConfig> {
             body: `This repo uses the configuration version '${userConfig.version}' which is not supported by this bot, please use version ${configVersion}.`,
         });
     }
-    return {
+    const newConfig: UmbrelBotDefaultConfig = {
         ...defaultConfig,
-        ...userConfig,
+        ...(<UmbrelBotDefaultConfig>userConfig),
     };
+    if (lastInterval && lastConfig.prFetchMinutes !== newConfig.prFetchMinutes) {
+        clearInterval(lastInterval);
+        lastInterval = setInterval(handleOpenPRs, newConfig.prFetchMinutes * 60 * 1000);
+    }
+    lastConfig = newConfig;
+    return newConfig;
+}
+
+async function handleChangedPR(repo: string, number: number) {
+    if (!managedRepos[`getumbrel-${repo}`]) {
+        managedRepos[`getumbrel-${repo}`] = new Repo('getumbrel', repo);
+    }
+    managedRepos[`getumbrel-${repo}`].scheduleBuildFromOctokit(
+        number,
+        false,
+        ProbotREST,
+        'getumbrel',
+        repo,
+        async (buildBranch) => {
+            const comment = await ProbotREST.issues.createComment({
+                owner: 'getumbrel',
+                repo: repo,
+                issue_number: number,
+                body: `Built image to ${buildOrg}/${repo}:${buildBranch}.`,
+            });
+            managedRepos[`getumbrel-${repo}`].deleteOldCommentsFromOctokit(number, ProbotREST);
+            managedRepos[`getumbrel-${repo}`].addComment(number, comment.data.id);
+        },
+    );
+}
+async function handleOpenPRs() {
+    const lastOpenPRs = openPRs;
+    openPRs = await getPRs(ProbotGraphQL);
+    const toDo = await comparePRList(lastOpenPRs, openPRs);
+    toDo.forEach(async (pr) => {
+        handleChangedPR(pr.repo, pr.number);
+    });
 }
 
 export async function build(context: Context): Promise<void> {
@@ -147,8 +183,10 @@ module.exports = (app: Probot) => {
                 }
                 return false;
             })
-        )
+        ) {
+            handleChangedPR(context.pullRequest().repo, context.pullRequest().pull_number);
             return;
+        }
 
         app.log.debug(`Closing PR ${htmlUrl}`);
         await comment(
@@ -174,31 +212,5 @@ module.exports = (app: Probot) => {
     });
 
     /* Check for new/changed PRs every 5min */
-    setInterval(async () => {
-        const lastOpenPRs = openPRs;
-        openPRs = await getPRs(ProbotGraphQL);
-        const toDo = await comparePRList(lastOpenPRs, openPRs);
-        toDo.forEach(async (pr) => {
-            if (!managedRepos[`getumbrel-${pr.repo}`]) {
-                managedRepos[`getumbrel-${pr.repo}`] = new Repo('getumbrel', pr.repo);
-            }
-            managedRepos[`getumbrel-${pr.repo}`].scheduleBuildFromOctokit(
-                pr.number,
-                false,
-                ProbotREST,
-                'getumbrel',
-                pr.repo,
-                async (buildBranch) => {
-                    const comment = await ProbotREST.issues.createComment({
-                        owner: 'getumbrel',
-                        repo: pr.repo,
-                        issue_number: pr.number,
-                        body: `Built image to ${buildOrg}/${pr.repo}:${buildBranch}.`,
-                    });
-                    managedRepos[`getumbrel-${pr.repo}`].deleteOldCommentsFromOctokit(pr.number, ProbotREST);
-                    managedRepos[`getumbrel-${pr.repo}`].addComment(pr.number, comment.data.id);
-                },
-            );
-        });
-    }, PR_FETCH_TIME * 60 * 1000);
+    lastInterval = setInterval(handleOpenPRs, (lastConfig.prFetchMinutes || defaultConfig.prFetchMinutes) * 60 * 1000);
 };
