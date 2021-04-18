@@ -4,7 +4,7 @@
         "incremental": true /* Enable incremental compilation */,
         "target": "es2020",
         "module": "commonjs",
-        "outDir": "./lib",
+        "outDir": "./",
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
@@ -14,13 +14,9 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
-        "typeRoots": [
-            "src/types"
-        ],
         "noImplicitOverride": true,
-        "removeComments": true, // JS files are just build assets and shouldn't be read/modified
-        "declaration": true
+        "removeComments": true // JS files are just build assets and shouldn't be read/modified
     },
-    "include": ["src/"],
+    "exclude": [],
     "compileOnSave": true
   }

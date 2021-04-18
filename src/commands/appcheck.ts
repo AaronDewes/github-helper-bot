@@ -20,6 +20,7 @@ interface UmbrelApp {
     gallery: string[];
     path: string;
     defaultPassword: string;
+    versionCheck?: boolean;
 }
 
 interface VersionDiff {
@@ -35,12 +36,18 @@ export async function getAppUpgrades(): Promise<string> {
     ).json();
     const potentialUpdates: VersionDiff[] = [];
     for (const app of data) {
+        console.info(`Checking app ${app.name}...`);
+        if(app.versionCheck === false) {
+            console.info("Version checking is disabled for this app.");
+            continue;
+        }
         const repoInfo = app.repo.replace('https://github.com/', '').split('/');
         const tagList = await octokit.repos.listTags({ owner: repoInfo[0], repo: repoInfo[1] });
         let tagName = "";
         const appVersion = app.version;
         for (const tag of tagList.data) {
             if(!semver.valid(app.version)) {
+                console.info("Not a valid semver.");
                 app.version = "0.0.1";
             }
             if(semver.valid(tag.name) && !semver.prerelease(tag.name) && semver.gt(tag.name, app.version)) {
@@ -65,7 +72,7 @@ export async function getAppUpgrades(): Promise<string> {
     let table = '| app | current release | used in Umbrel |\n';
     table += '|-----|-----------------|----------------|\n';
     potentialUpdates.forEach((update) => {
-        table += `|${update.app}|${update.current}|${update.umbrel}|\n`;
+        table += `| ${update.app} | ${update.current} | ${update.umbrel} |\n`;
     });
     return table;
 }
