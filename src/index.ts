@@ -141,6 +141,9 @@ module.exports = (app: Probot) => {
         // Check if it is a command
         const { comment, issue } = context.payload;
         const command = <RegExpMatchArray>(comment || issue).body.match(/^\/([\w]+)\b *(.*)?$/m);
+        if (!command || (command && !command[1])) {
+            return;
+        }
         const issueInfo = context.octokit.issues.get(context.issue());
         let isPR = false;
         if ((await issueInfo).data.pull_request) {
