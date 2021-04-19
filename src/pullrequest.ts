@@ -35,6 +35,7 @@ export default class PullRequest {
                 clearTimeout(<number>this.timeoutID);
                 this.timeoutID = false;
             }
+            build(buildContext, callbackfn);
             return;
         }
         this.timeoutID = setTimeout(build, 5 * 60 * 1000, buildContext, callbackfn);
