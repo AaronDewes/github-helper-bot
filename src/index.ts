@@ -23,8 +23,8 @@ const ProbotREST = new extendedOctokit({
     authStrategy: createProbotAuth,
 });
 
-let managedRepos: Record<string, Repo>;
-let openPRs: PRInfo[];
+const managedRepos: Record<string, Repo> = {};
+let openPRs: PRInfo[] = [];
 let lastConfig: UmbrelBotConfig = defaultConfig;
 let lastInterval: NodeJS.Timeout;
 
