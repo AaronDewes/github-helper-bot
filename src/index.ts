@@ -13,11 +13,13 @@ import { defaultConfig, UmbrelBotConfig, UmbrelBotDefaultConfig } from './config
 import handleCommand from './commands';
 import { allowedRepoOwners, buildOrg, configVersion } from './consts';
 
+const extendedOctokit = Octokit.plugin(config);
+
 const ProbotGraphQL = graphql.defaults({
     authStrategy: createProbotAuth,
 });
 
-const ProbotREST = new Octokit({
+const ProbotREST = new extendedOctokit({
     authStrategy: createProbotAuth,
 });
 
@@ -45,10 +47,12 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 
 async function getConfig(context: Context): Promise<UmbrelBotConfig> {
     const userConfig: UmbrelBotConfig =
-        (await ProbotREST.config.get({
-            ...context.repo(),
-            path: '.github/UmbrelBot.yml',
-        })) || {};
+        (
+            await ProbotREST.config.get({
+                ...context.repo(),
+                path: '.github/UmbrelBot.yml',
+            })
+        ).config || {};
     if (userConfig !== {} && userConfig.version && userConfig.version !== configVersion) {
         context.octokit.issues.createComment({
             ...context.issue(),
