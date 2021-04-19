@@ -48,6 +48,7 @@ async function genericBuild(prInfo: genericPRInfo, pushURL: string, callbackfn?:
     fs.mkdirSync(folderPath, {
         recursive: true,
     });
+    git.init({ fs, dir: folderPath });
     git.setConfig({ fs, dir: folderPath, path: "user.name", value: "UmbrelBot" });
     git.setConfig({ fs, dir: folderPath, path: "user.email", value: "bot@umbrel.tech" });
     git.fetch({ fs, http, dir: folderPath, url: prInfo.head.repo.clone_url });
