@@ -1,6 +1,5 @@
-import { Context } from 'probot';
-import build, { buildOctokit } from './builder';
-import { Octokit } from '@octokit/rest';
+import { ProbotOctokit } from 'probot';
+import build from './builder';
 
 /**
  * Manages a Pull Request
@@ -27,28 +26,7 @@ export default class PullRequest {
      */
     public async scheduleBuild(
         now = false,
-        buildContext: Context,
-        callbackfn?: (buildBranch: string) => void,
-    ): Promise<void> {
-        if (now) {
-            if (typeof this.timeoutID == 'number') {
-                clearTimeout(<number>this.timeoutID);
-                this.timeoutID = false;
-            }
-            build(buildContext, callbackfn);
-            return;
-        }
-        this.timeoutID = setTimeout(build, 5 * 60 * 1000, buildContext, callbackfn);
-    }
-
-    /**
-     * Schedules a build to run
-     * @param {boolean} now true if the build should be ran now,
-     * false or in 5 minutes (if no new one gets triggered in that time)
-     */
-    public async scheduleBuildFromOctokit(
-        now = false,
-        octokit: Octokit,
+        octokit: InstanceType<typeof ProbotOctokit>,
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
@@ -58,29 +36,25 @@ export default class PullRequest {
                 clearTimeout(<number>this.timeoutID);
                 this.timeoutID = false;
             }
+            build(octokit, this.number, repo, owner, callbackfn);
             return;
         }
-        this.timeoutID = setTimeout(buildOctokit, 5 * 60 * 1000, octokit, this.number, owner, repo, callbackfn);
+        this.timeoutID = setTimeout(build, 5 * 60 * 1000, octokit, this.number, repo, owner, callbackfn);
     }
 
     public async addComment(id: number): Promise<void> {
         this.olderComments?.push(id);
     }
 
-    public async deleteOldComments(context: Context): Promise<void> {
-        this.olderComments?.forEach((comment) => {
-            context.octokit.issues.deleteComment({
-                ...context.repo(),
-                comment_id: comment,
-            });
-        });
-    }
-
-    public async deleteOldCommentsFromOctokit(octokit: Octokit): Promise<void> {
+    public async deleteOldComments(
+        octokit: InstanceType<typeof ProbotOctokit>,
+        owner: string,
+        repo: string,
+    ): Promise<void> {
         this.olderComments?.forEach((comment) => {
             octokit.issues.deleteComment({
-                owner: this.owner,
-                repo: this.repo,
+                owner,
+                repo,
                 comment_id: comment,
             });
         });
@@ -110,25 +84,14 @@ export class Repo {
     }
 
     public async scheduleBuild(
-        pr: number,
         now = false,
-        buildContext: Context,
-        callbackfn?: (buildBranch: string) => void,
-    ): Promise<void> {
-        this.managePR(pr);
-        this.PRs[pr].scheduleBuild(now, buildContext, callbackfn);
-    }
-
-    public async scheduleBuildFromOctokit(
+        octokit: InstanceType<typeof ProbotOctokit>,
         pr: number,
-        now = false,
-        octokit: Octokit,
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
     ): Promise<void> {
-        this.managePR(pr);
-        this.PRs[pr].scheduleBuildFromOctokit(now, octokit, owner, repo, callbackfn);
+        this.PRs[pr].scheduleBuild(now, octokit, repo, owner, callbackfn);
     }
 
     public async addComment(pr: number, id: number): Promise<void> {
@@ -136,13 +99,13 @@ export class Repo {
         this.PRs[pr].addComment(id);
     }
 
-    public async deleteOldComments(pr: number, context: Context): Promise<void> {
+    public async deleteOldComments(
+        octokit: InstanceType<typeof ProbotOctokit>,
+        pr: number,
+        owner: string,
+        repo: string,
+    ): Promise<void> {
         this.managePR(pr);
-        this.PRs[pr].deleteOldComments(context);
-    }
-
-    public async deleteOldCommentsFromOctokit(pr: number, octokit: Octokit): Promise<void> {
-        this.managePR(pr);
-        this.PRs[pr].deleteOldCommentsFromOctokit(octokit);
+        this.PRs[pr].deleteOldComments(octokit, owner, repo);
     }
 }

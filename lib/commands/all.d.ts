@@ -1,3 +1,3 @@
-import { BaseCommand } from './baseCommand';
-declare const commands: Record<string, typeof BaseCommand>;
+import Command from './command';
+declare const commands: Record<string, typeof Command>;
 export default commands;

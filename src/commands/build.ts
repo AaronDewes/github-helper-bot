@@ -1,7 +1,7 @@
 import { Context } from 'probot';
 import { build } from '../index';
-import { BaseCommand } from './baseCommand';
-export default class Command extends BaseCommand {
+import Command from './command';
+export default class CmdBuild extends Command {
     // TODO: Remove this when Prettier supports override
     // eslint-disable-next-line
     static override helptext = "This command builds the current PR branch. Builds normally happen automatically, but you can use this command if you don't want to wait.";

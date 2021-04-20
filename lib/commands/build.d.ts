@@ -1,6 +1,6 @@
 import { Context } from 'probot';
-import { BaseCommand } from './baseCommand';
-export default class Command extends BaseCommand {
+import Command from './command';
+export default class CmdBuild extends Command {
     static helptext: string;
     static run(context: Context, _args: string, isPR: boolean): void;
 }

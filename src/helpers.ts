@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
-import { Context } from 'probot';
+import { RestEndpointMethodTypes } from '@octokit/rest';
+import { Context, ProbotOctokit } from 'probot';
 import { PRInfo } from './index';
-import { graphql, GraphQlQueryResponseData } from '@octokit/graphql';
+import { GraphQlQueryResponseData } from '@octokit/graphql';
 
 /**
  * Generates a random hex value.
@@ -21,34 +21,17 @@ export function randomHash(count: number): string {
 }
 
 /**
- * Checks if a repo exists on GitHub (using a Probot context)
- *
- * @param context The Probot context
- * @param {string} owner The owner of the repo to check
- * @param {string} repo The name of the repo to check
- * @returns {string} A randomly generated string
- */
-export async function repoExists(context: Context, owner: string, repo: string): Promise<boolean> {
-    try {
-        await context.octokit.repos.get({
-            owner,
-            repo,
-        });
-    } catch (error) {
-        return false;
-    }
-    return true;
-}
-
-/**
  * Checks if a repo exists on GitHub (using Octokit)
  *
- * @param octokit An octokit instance
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
  * @param {string} owner The owner of the repo to check
  * @param {string} repo The name of the repo to check
- * @returns {string} A randomly generated string
  */
-export async function repoExistsOctokit(octokit: Octokit, owner: string, repo: string): Promise<boolean> {
+export async function repoExists(
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+): Promise<boolean> {
     try {
         await octokit.repos.get({
             owner,
@@ -82,24 +65,42 @@ export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<P
 }
 
 /**
- * Adds a label to a GitHub repo
+ * Adds a label to an issue
  *
- * @param context The Probot context
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
+ * @param {string} owner The owner of the repo where this issue is
+ * @param {string} repo The name of the repo where this issue is
+ * @param {number} issue The number of the issue
  * @param {string} name The name of the label
  * @param {string} color The color that the label should have if it's not present (hex string)
  */
-export async function addLabel(context: Context, name: string, color: string): Promise<void> {
-    await ensureLabelExists(context, { name, color });
-    await context.octokit.issues.addLabels({ ...context.issue(), labels: [name] });
+export async function addLabel(
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+    issue_number: number,
+    name: string,
+    color: string,
+): Promise<void> {
+    await ensureLabelExists(octokit, owner, repo, name, color);
+    await octokit.issues.addLabels({ repo, owner, issue_number, labels: [name] });
 }
 
+/**
+ * Closes an issue on GitHub
+ *
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
+ * @param {string} owner The owner of the repo where this issue is
+ * @param {string} repo The name of the repo where this issue is
+ * @param {number} issue The number of the issue
+ */
 export async function closeIssue(
-    context: Context,
-    params: RestEndpointMethodTypes['issues']['update']['parameters'],
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+    issue_number: number,
 ): Promise<void> {
-    const closeParams: RestEndpointMethodTypes['issues']['update']['parameters'] = { ...params, state: 'closed' };
-
-    context.octokit.issues.update(closeParams);
+    octokit.issues.update({ owner, repo, issue_number, state: 'closed' });
 }
 
 export async function comment(
@@ -109,11 +110,26 @@ export async function comment(
     context.octokit.issues.createComment(params);
 }
 
-export async function ensureLabelExists(context: Context, { name, color }: Record<string, string>): Promise<void> {
+/**
+ * Checks if a label exists on a GitHub repo, and creates it if not
+ *
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
+ * @param {string} owner The owner of the repo to check
+ * @param {string} repo The name of the repo to check
+ * @param {string} name The name of the label
+ * @param {string} color The color that the label should have if it's not present (hex string)
+ */
+export async function ensureLabelExists(
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+    name: string,
+    color: string,
+): Promise<void> {
     try {
-        await context.octokit.issues.getLabel(context.repo({ name }));
+        await octokit.issues.getLabel({ repo, owner, name });
     } catch (e) {
-        context.octokit.issues.createLabel({ ...context.repo(), name, color });
+        octokit.issues.createLabel({ repo, owner, name, color });
     }
 }
 
@@ -142,8 +158,8 @@ export async function hasPushAccess(
  * @param octokit A GrapQL octokit instance
  * @returns {PRInfo[]} An array of pull requests with basic information about them
  */
-export async function getPRs(octokit: typeof graphql): Promise<PRInfo[]> {
-    const fetchedData: GraphQlQueryResponseData = await octokit(
+export async function getPRs(octokit: InstanceType<typeof ProbotOctokit>): Promise<PRInfo[]> {
+    const fetchedData: GraphQlQueryResponseData = await octokit.graphql(
         `
       {
         search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100) {
@@ -178,7 +194,7 @@ export async function getPRs(octokit: typeof graphql): Promise<PRInfo[]> {
     let hasNextPage = fetchedData.data.search.pageInfo.hasNextPage;
     let endCursor = fetchedData.data.search.pageInfo.endCursor;
     while (hasNextPage == true) {
-        const nowFetched: GraphQlQueryResponseData = await octokit(
+        const nowFetched: GraphQlQueryResponseData = await octokit.graphql(
             `
         {
           search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100, after: ${endCursor}) {
@@ -226,21 +242,3 @@ export async function getPRs(octokit: typeof graphql): Promise<PRInfo[]> {
     });
     return result;
 }
-
-export type genericPRInfo = {
-    number: number;
-    head: {
-        sha: string;
-        ref: string;
-        repo: {
-            clone_url: string;
-        };
-    };
-    base: {
-        ref: string;
-        sha: string;
-        repo: {
-            clone_url: string;
-        };
-    };
-};

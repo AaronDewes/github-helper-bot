@@ -1,8 +1,8 @@
 import { Context } from 'probot';
-import { BaseCommand } from './baseCommand';
+import Command from './command';
 import { configVersion, version } from '../consts';
 
-export default class Command extends BaseCommand {
+export default class CmdVersion extends Command {
     // TODO: Remove this when Prettier supports override
     // eslint-disable-next-line
     static override helptext = "Outputs the current version of this bot.";

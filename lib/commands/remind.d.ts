@@ -1,7 +1,7 @@
 import { Context } from 'probot';
-import { BaseCommand } from './baseCommand';
+import Command from './command';
 export declare function remind(context: Context, args: string): Promise<void>;
-export default class Command extends BaseCommand {
+export default class CmdRemind extends Command {
     static helptext: string;
     static run(context: Context, args: string, _isPR: boolean): void;
 }

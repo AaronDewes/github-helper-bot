@@ -1,10 +1,5 @@
-import { Probot, Context } from 'probot';
+import { Probot, Context, ProbotOctokit } from 'probot';
 import { Repo } from './pullrequest';
-import { createProbotAuth } from 'octokit-auth-probot';
-import { graphql } from '@octokit/graphql';
-import { Octokit } from '@octokit/rest';
-// @ts-ignore
-import { config, composeConfigGet } from '@probot/octokit-plugin-config'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import jp from 'jsonpath';
 
 import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
@@ -13,15 +8,8 @@ import { defaultConfig, UmbrelBotConfig, UmbrelBotDefaultConfig } from './config
 import handleCommand from './commands';
 import { allowedRepoOwners, buildOrg, configVersion } from './consts';
 
-const extendedOctokit = Octokit.plugin(config);
-
-const ProbotGraphQL = graphql.defaults({
-    authStrategy: createProbotAuth,
-});
-
-const ProbotREST = new extendedOctokit({
-    authStrategy: createProbotAuth,
-});
+// Not authenticated yet
+let BotOctokit = new ProbotOctokit();
 
 const managedRepos: Record<string, Repo> = {};
 let openPRs: PRInfo[] = [];
@@ -48,7 +36,7 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 async function getConfig(context: Context): Promise<UmbrelBotConfig> {
     const userConfig: UmbrelBotConfig =
         (
-            await ProbotREST.config.get({
+            await context.octokit.config.get({
                 ...context.repo(),
                 path: '.github/UmbrelBot.yml',
             })
@@ -75,27 +63,27 @@ async function handleChangedPR(repo: string, number: number) {
     if (!managedRepos[`getumbrel-${repo}`]) {
         managedRepos[`getumbrel-${repo}`] = new Repo('getumbrel', repo);
     }
-    managedRepos[`getumbrel-${repo}`].scheduleBuildFromOctokit(
-        number,
+    managedRepos[`getumbrel-${repo}`].scheduleBuild(
         false,
-        ProbotREST,
+        BotOctokit,
+        number,
         'getumbrel',
         repo,
         async (buildBranch) => {
-            const comment = await ProbotREST.issues.createComment({
+            const comment = await BotOctokit.issues.createComment({
                 owner: 'getumbrel',
                 repo: repo,
                 issue_number: number,
                 body: `Built image to ${buildOrg}/${repo}:${buildBranch}.`,
             });
-            managedRepos[`getumbrel-${repo}`].deleteOldCommentsFromOctokit(number, ProbotREST);
+            managedRepos[`getumbrel-${repo}`].deleteOldComments(BotOctokit, number, 'getumbrel', repo);
             managedRepos[`getumbrel-${repo}`].addComment(number, comment.data.id);
         },
     );
 }
 async function handleOpenPRs() {
     const lastOpenPRs = openPRs;
-    openPRs = await getPRs(ProbotGraphQL);
+    openPRs = await getPRs(BotOctokit);
     const toDo = await comparePRList(lastOpenPRs, openPRs);
     toDo.forEach(async (pr) => {
         handleChangedPR(pr.repo, pr.number);
@@ -111,19 +99,32 @@ export async function build(context: Context): Promise<void> {
     }
     const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
     const PR = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    PR.scheduleBuild(context.issue().issue_number, true, context, async (buildBranch) => {
-        const comment = await ProbotREST.issues.createComment({
-            owner: context.repo().owner,
-            repo: context.repo().repo,
-            issue_number: context.pullRequest().pull_number,
-            body: `Built image to ${buildOrg}/${context.repo().repo}:${buildBranch}.`,
-        });
-        repo.deleteOldComments(context.pullRequest().pull_number, context);
-        repo.addComment(context.pullRequest().pull_number, comment.data.id);
-    });
+    PR.scheduleBuild(
+        true,
+        context.octokit,
+        context.issue().issue_number,
+        context.repo().owner,
+        context.repo().repo,
+        async (buildBranch) => {
+            const comment = await BotOctokit.issues.createComment({
+                owner: context.repo().owner,
+                repo: context.repo().repo,
+                issue_number: context.pullRequest().pull_number,
+                body: `Built image to ${buildOrg}/${context.repo().repo}:${buildBranch}.`,
+            });
+            repo.deleteOldComments(
+                context.octokit,
+                context.pullRequest().pull_number,
+                context.repo().owner,
+                context.repo().repo,
+            );
+            repo.addComment(context.pullRequest().pull_number, comment.data.id);
+        },
+    );
 }
 
 module.exports = (app: Probot) => {
+    BotOctokit = new ProbotOctokit();
     /* Parse comments */
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
         if (!allowedRepoOwners.includes(context.issue().owner)) {
@@ -205,12 +206,15 @@ module.exports = (app: Probot) => {
         );
         if (config.invalidPRConfig?.addLabel) {
             await addLabel(
-                context,
+                context.octokit,
+                context.repo().owner,
+                context.repo().repo,
+                context.issue().issue_number,
                 config.invalidPRConfig.labelName || defaultConfig.invalidPRConfig.labelName,
                 config.invalidPRConfig.labelColor || defaultConfig.invalidPRConfig.labelColor,
             );
         }
-        return closeIssue(context, context.issue());
+        return closeIssue(context.octokit, context.repo().owner, context.repo().repo, context.issue().issue_number);
     });
 
     app.on(['pull_request.closed', 'pull_request.merged'], async (context) => {

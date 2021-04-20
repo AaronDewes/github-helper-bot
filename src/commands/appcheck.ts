@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import {Octokit} from '@octokit/rest'
 import { Context } from 'probot';
-import { BaseCommand } from './baseCommand';
+import Command from './command';
 import semver from 'semver';
 
 interface UmbrelApp {
@@ -77,7 +77,7 @@ export async function getAppUpgrades(): Promise<string> {
     return table;
 }
 
-export default class Command extends BaseCommand {
+export default class CmdHelp extends Command {
     // TODO: Remove this when Prettier supports override
     // eslint-disable-next-line
     static override helptext = "Check if all apps used in getumbrel/umbrel are up-to-date.";
