@@ -1,12 +1,12 @@
 import { Probot, Context, ProbotOctokit } from 'probot';
 import { Repo } from './pullrequest';
-import jp from 'jsonpath';
 
-import { comparePRList, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
+import { comparePRList, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
-import { defaultConfig, UmbrelBotConfig, UmbrelBotDefaultConfig } from './config';
+import { defaultConfig, UmbrelBotConfig, getConfig } from './config';
 import handleCommand from './commands';
-import { allowedRepoOwners, buildOrg, configVersion } from './consts';
+import { allowedRepoOwners, buildOrg } from './consts';
+import validatePr from './prValidator';
 
 // Not authenticated yet
 let BotOctokit = new ProbotOctokit();
@@ -33,32 +33,6 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 `;
 }
 
-async function getConfig(context: Context): Promise<UmbrelBotConfig> {
-    const userConfig: UmbrelBotConfig =
-        (
-            await context.octokit.config.get({
-                ...context.repo(),
-                path: '.github/UmbrelBot.yml',
-            })
-        ).config || {};
-    if (userConfig !== {} && userConfig.version && userConfig.version !== configVersion) {
-        context.octokit.issues.createComment({
-            ...context.issue(),
-            body: `This repo uses the configuration version '${userConfig.version}' which is not supported by this bot, please use version ${configVersion}.`,
-        });
-    }
-    const newConfig: UmbrelBotDefaultConfig = {
-        ...defaultConfig,
-        ...(<UmbrelBotDefaultConfig>userConfig),
-    };
-    if (lastInterval && lastConfig.prFetchMinutes !== newConfig.prFetchMinutes) {
-        clearInterval(lastInterval);
-        lastInterval = setInterval(handleOpenPRs, newConfig.prFetchMinutes * 60 * 1000);
-    }
-    lastConfig = newConfig;
-    return newConfig;
-}
-
 async function handleChangedPR(repo: string, number: number) {
     if (!managedRepos[`getumbrel-${repo}`]) {
         managedRepos[`getumbrel-${repo}`] = new Repo('getumbrel', repo);
@@ -81,6 +55,7 @@ async function handleChangedPR(repo: string, number: number) {
         },
     );
 }
+
 async function handleOpenPRs() {
     const lastOpenPRs = openPRs;
     openPRs = await getPRs(BotOctokit);
@@ -133,7 +108,12 @@ module.exports = (app: Probot) => {
                 body: getPermissionDeniedError(context.issue().owner),
             });
         }
-        const config = await getConfig(context);
+        const config = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
+        if (lastConfig.prFetchMinutes !== config.prFetchMinutes) {
+            clearInterval(lastInterval);
+            lastInterval = setInterval(handleOpenPRs, <number>lastConfig.prFetchMinutes * 60 * 1000);
+        }
+        lastConfig = config;
         if (config.blocklist && config.blocklist.includes(context.payload.sender.login)) {
             console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;
@@ -171,49 +151,7 @@ module.exports = (app: Probot) => {
         return unfurl(context, <string>issue.data.body_html);
     });
 
-    app.on('pull_request.opened', async (context) => {
-        const config = await getConfig(context);
-        if (!config.invalidPRConfig?.enabled) return;
-        const htmlUrl = context.payload.pull_request.html_url;
-        app.log.debug(`Inspecting: ${htmlUrl}`);
-        const username = context.payload.pull_request.user.login;
-        const canPush = await hasPushAccess(context, context.repo({ username }));
-        const data = Object.assign({ has_push_access: canPush }, context.payload);
-        const filters = config.invalidPRConfig?.filters || defaultConfig.invalidPRConfig.filters;
-        if (
-            !filters.every((filter: string, i: number) => {
-                try {
-                    if (jp.query([data], `$[?(${filter})]`).length > 0) {
-                        app.log.info(`Filter "${filter}" matched the PR ✅ [${i + 1} of ${filters.length}]`);
-                        return true;
-                    }
-                } catch (e) {
-                    app.log.debug(`Malformed JSONPath query: "${filter}"`);
-                }
-                return false;
-            })
-        ) {
-            handleChangedPR(context.pullRequest().repo, context.pullRequest().pull_number);
-            return;
-        }
-
-        app.log.debug(`Closing PR ${htmlUrl}`);
-        await context.octokit.issues.createComment({
-            ...context.issue(),
-            body: config.invalidPRConfig?.commentBody || defaultConfig.invalidPRConfig.commentBody,
-        });
-        if (config.invalidPRConfig?.addLabel) {
-            await addLabel(
-                context.octokit,
-                context.repo().owner,
-                context.repo().repo,
-                context.issue().issue_number,
-                config.invalidPRConfig.labelName || defaultConfig.invalidPRConfig.labelName,
-                config.invalidPRConfig.labelColor || defaultConfig.invalidPRConfig.labelColor,
-            );
-        }
-        return closeIssue(context.octokit, context.repo().owner, context.repo().repo, context.issue().issue_number);
-    });
+    app.on('pull_request.opened', validatePr);
 
     app.on(['pull_request.closed', 'pull_request.merged'], async (context) => {
         if (managedRepos[`getumbrel-${context.pullRequest().repo}`]) {

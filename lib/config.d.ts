@@ -1,3 +1,4 @@
+import { ProbotOctokit } from 'probot';
 export interface InvalidPRConfig {
     enabled?: boolean;
     filters?: string[];
@@ -27,3 +28,4 @@ export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     prFetchMinutes: number;
 }
 export declare const defaultConfig: UmbrelBotDefaultConfig;
+export declare function getConfig(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string): Promise<UmbrelBotConfig>;

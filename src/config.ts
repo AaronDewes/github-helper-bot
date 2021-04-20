@@ -1,3 +1,4 @@
+import { ProbotOctokit } from 'probot';
 import { configVersion } from './consts';
 
 export interface InvalidPRConfig {
@@ -61,3 +62,26 @@ export const defaultConfig: UmbrelBotDefaultConfig = {
     blocklist: [],
     prFetchMinutes: 5,
 };
+
+export async function getConfig(
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+): Promise<UmbrelBotConfig> {
+    const userConfig: UmbrelBotConfig =
+        (
+            await octokit.config.get({
+                owner,
+                repo,
+                path: '.github/UmbrelBot.yml',
+            })
+        ).config || {};
+    const newConfig: UmbrelBotDefaultConfig = {
+        ...defaultConfig,
+        ...(<UmbrelBotDefaultConfig>userConfig),
+    };
+    if (userConfig !== {} && userConfig.version && userConfig.version !== configVersion) {
+        return defaultConfig;
+    }
+    return newConfig;
+}
