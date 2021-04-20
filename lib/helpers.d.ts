@@ -6,7 +6,6 @@ export declare function repoExists(octokit: InstanceType<typeof ProbotOctokit>, 
 export declare function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<PRInfo[]>;
 export declare function addLabel(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number, name: string, color: string): Promise<void>;
 export declare function closeIssue(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number): Promise<void>;
-export declare function comment(context: Context, params: RestEndpointMethodTypes['issues']['createComment']['parameters']): Promise<void>;
 export declare function ensureLabelExists(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, name: string, color: string): Promise<void>;
 export declare function labelExists(context: Context, name: string): Promise<boolean>;
 export declare function hasPushAccess(context: Context, params: RestEndpointMethodTypes['repos']['getCollaboratorPermissionLevel']['parameters']): Promise<boolean>;

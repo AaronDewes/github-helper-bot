@@ -2,7 +2,7 @@ import { Probot, Context, ProbotOctokit } from 'probot';
 import { Repo } from './pullrequest';
 import jp from 'jsonpath';
 
-import { comparePRList, comment, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
+import { comparePRList, closeIssue, addLabel, hasPushAccess, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
 import { defaultConfig, UmbrelBotConfig, UmbrelBotDefaultConfig } from './config';
 import handleCommand from './commands';
@@ -198,12 +198,10 @@ module.exports = (app: Probot) => {
         }
 
         app.log.debug(`Closing PR ${htmlUrl}`);
-        await comment(
-            context,
-            context.issue({
-                body: config.invalidPRConfig?.commentBody || defaultConfig.invalidPRConfig.commentBody,
-            }),
-        );
+        await context.octokit.issues.createComment({
+            ...context.issue(),
+            body: config.invalidPRConfig?.commentBody || defaultConfig.invalidPRConfig.commentBody,
+        });
         if (config.invalidPRConfig?.addLabel) {
             await addLabel(
                 context.octokit,

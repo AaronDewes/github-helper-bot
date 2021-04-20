@@ -103,13 +103,6 @@ export async function closeIssue(
     octokit.issues.update({ owner, repo, issue_number, state: 'closed' });
 }
 
-export async function comment(
-    context: Context,
-    params: RestEndpointMethodTypes['issues']['createComment']['parameters'],
-): Promise<void> {
-    context.octokit.issues.createComment(params);
-}
-
 /**
  * Checks if a label exists on a GitHub repo, and creates it if not
  *
