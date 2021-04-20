@@ -1,9 +1,7 @@
 import { Context } from 'probot';
 
-export class BaseCommand {
-    static helptext = 'description';
+export abstract class BaseCommand {
+    static helptext: string;
 
-    static run(_context: Context, _args: string, _isPR: boolean): void {
-        throw new Error("A command didn't implement the run fuction!");
-    }
+    static run: (_context: Context, _args: string, _isPR: boolean) => void;
 }

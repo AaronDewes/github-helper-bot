@@ -1,5 +1,5 @@
 {
-  "name": "github-bot-v2",
+  "name": "github-helper-bot",
   "scripts": {
     "build": "tsc",
     "start": "probot run ./lib/index.js",

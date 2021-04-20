@@ -7,3 +7,4 @@
 .pnp.*
 .env
 private
+lib/tsconfig.tsbuildinfo
