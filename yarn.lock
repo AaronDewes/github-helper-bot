@@ -368,15 +368,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@probot/octokit-plugin-config@npm:^1.0.0, @probot/octokit-plugin-config@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@probot/octokit-plugin-config@npm:1.0.3"
+"@probot/octokit-plugin-config@npm:^1.0.0, @probot/octokit-plugin-config@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@probot/octokit-plugin-config@npm:1.0.4"
   dependencies:
     "@types/js-yaml": ^4.0.0
-    js-yaml: ^4.0.0
+    js-yaml: ^4.1.0
   peerDependencies:
     "@octokit/core": ">=3"
-  checksum: a652520e038bfd5b12b4387c3d91a34a82b9f6f64d7a5c46560175820993f04898d09843deed14c2529e0414d5156f131b4bba43e99bafe423ed07b7b7f26cad
+  checksum: 2f7827fce0a10a044a7f9f9c430713220c3f7524cdc02eed63ac85a82b432e2a31bbc310564c039b7a29e8ca59bed4c7ce1135cf14547dd6e3bde9c9891dcd7d
   languageName: node
   linkType: hard
 
@@ -656,14 +656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 14.14.37
-  resolution: "@types/node@npm:14.14.37"
-  checksum: 647e671ac3815f428a07ae9353ebab93c5335d4d0a461ca837a79eebf55c04f28bee80f0c43881cdd8696f595feb112bc8eb74f6124125e02f79a7677374c187
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^14.14.41":
+"@types/node@npm:*, @types/node@npm:^14.14.41":
   version: 14.14.41
   resolution: "@types/node@npm:14.14.41"
   checksum: 8fc205d411742fba8f12bf255423427481bdb371035b2c32db7167642fc1cff2bdfc2007ffc5ddbfe2c09f0df851d2df9f2199fac1f2b0046c1d6ccb2894cffd
@@ -2552,7 +2545,7 @@ __metadata:
     "@octokit/graphql": ^4.6.1
     "@octokit/rest": ^18.5.2
     "@octokit/types": ^6.13.0
-    "@probot/octokit-plugin-config": ^1.0.3
+    "@probot/octokit-plugin-config": ^1.0.4
     "@types/jsdom": ^16.2.10
     "@types/jsonpath": ^0.2.0
     "@types/marked": ^2.0.2
@@ -2579,10 +2572,10 @@ __metadata:
     octokit-auth-probot: ^1.2.4
     parse-reminder: ^1.3.0
     prettier: ^2.2.1
-    probot: ^11.1.0
+    probot: ^11.1.1
     probot-attachments: ^1.0.1
     semver: ^7.3.5
-    typescript: ^4.3.0-dev.20210418
+    typescript: ^4.3.0-dev.20210420
     unfurl.js: ^5.2.5
   languageName: unknown
   linkType: soft
@@ -2677,24 +2670,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"handlebars@npm:4.7.6":
-  version: 4.7.6
-  resolution: "handlebars@npm:4.7.6"
-  dependencies:
-    minimist: ^1.2.5
-    neo-async: ^2.6.0
-    source-map: ^0.6.1
-    uglify-js: ^3.1.4
-    wordwrap: ^1.0.0
-  dependenciesMeta:
-    uglify-js:
-      optional: true
-  bin:
-    handlebars: bin/handlebars
-  checksum: 6fb9ba14c703cb6e77d5a1dcb37631126d25ae1503834b9b4f151d5324b52192a618d1944badc351588271cc28a8144093f85dbabc8c72278cfa2dbd09c70124
-  languageName: node
-  linkType: hard
-
 "handlebars@npm:4.7.7":
   version: 4.7.7
   resolution: "handlebars@npm:4.7.7"
@@ -2767,17 +2742,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hbs@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "hbs@npm:4.1.1"
-  dependencies:
-    handlebars: 4.7.6
-    walk: 2.3.14
-  checksum: a5c12612e78f2353152806db103b385e10333480a56458d2afaad07965d3648e399591c33e5099e3f30a13c00f51c22612c18d6a9b582ee271fb57b631fc9025
-  languageName: node
-  linkType: hard
-
-"hbs@npm:^4.1.2":
+"hbs@npm:^4.1.1, hbs@npm:^4.1.2":
   version: 4.1.2
   resolution: "hbs@npm:4.1.2"
   dependencies:
@@ -3214,14 +3179,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "js-yaml@npm:4.0.0"
+"js-yaml@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "js-yaml@npm:4.1.0"
   dependencies:
     argparse: ^2.0.1
   bin:
     js-yaml: bin/js-yaml.js
-  checksum: 931d6dddb3589fa272c8273366c6dffa99fd6bd26ac7b70f9bac925c28cb7ae352b964192df84f90ecd7a2ff50ab87e6d58e2148eb19c89aa155c73ed847ab92
+  checksum: c7830dfd456c3ef2c6e355cc5a92e6700ceafa1d14bba54497b34a99f0376cecbb3e9ac14d3e5849b426d5a5140709a66237a8c991c675431271c4ce5504151a
   languageName: node
   linkType: hard
 
@@ -4159,9 +4124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"probot@npm:^11.1.0":
-  version: 11.1.0
-  resolution: "probot@npm:11.1.0"
+"probot@npm:^11.1.1":
+  version: 11.1.1
+  resolution: "probot@npm:11.1.1"
   dependencies:
     "@octokit/core": ^3.2.4
     "@octokit/plugin-enterprise-compatibility": ^1.2.8
@@ -4200,7 +4165,7 @@ __metadata:
     uuid: ^8.3.2
   bin:
     probot: bin/probot.js
-  checksum: 8aa1ce7e82d0b0d90e4e5fe2c161c77faa3377e9656807b1c82a6a7f91bf4aa7537745ef52c56da00df86a2b3f24f29828f145145fd1b0cd95bd7de8c6e11857
+  checksum: 37e28d36e43d0648c05ea33e83257a85b38322cc80992ab13f066af4c133d5b11fa96b506be7b2eed9913df16b324412da623b1d798a05a9051ea3dda25495e2
   languageName: node
   linkType: hard
 
@@ -5087,23 +5052,23 @@ resolve@^1.19.0:
   languageName: node
   linkType: hard
 
-typescript@^4.3.0-dev.20210418:
-  version: 4.3.0-dev.20210418
-  resolution: "typescript@npm:4.3.0-dev.20210418"
+typescript@^4.3.0-dev.20210420:
+  version: 4.3.0-dev.20210420
+  resolution: "typescript@npm:4.3.0-dev.20210420"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 03b7b0c8c3aa8c6529d0945683082455d8eb8f66dd370893bea7b8e42e1f493454622ab6ac8cae6d101459bcfda9df4bdbd9f311247097ea3f05e10a61f2da45
+  checksum: 744b0f48ce77d2bcf96c0e015da245bac0ed2eb2bd969ec0d509812b3821cc44c59e0209f3c08405c81995f8961456090a93c867e277265700ddaf9f1852f1a0
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.3.0-dev.20210418#~builtin<compat/typescript>":
-  version: 4.3.0-dev.20210418
-  resolution: "typescript@patch:typescript@npm%3A4.3.0-dev.20210418#~builtin<compat/typescript>::version=4.3.0-dev.20210418&hash=34ad7d"
+"typescript@patch:typescript@^4.3.0-dev.20210420#~builtin<compat/typescript>":
+  version: 4.3.0-dev.20210420
+  resolution: "typescript@patch:typescript@npm%3A4.3.0-dev.20210420#~builtin<compat/typescript>::version=4.3.0-dev.20210420&hash=34ad7d"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e274a3aa36437b5ef98dc1dbdeb4a92d5345f77545228557612793f04978c5ab13d109a0a66c35b5f8845161581148826301a4028c8b3d9715cb771f85e3c6ca
+  checksum: 7723c4fe471305bed0b2db48ab9e9e7f3d49dfd8077c6b99251c653702b21a8c7ea0e8ffa45f311838c9ec78ba6345bec78d1ce42d58ba28de9cb7762a4697c0
   languageName: node
   linkType: hard
 
