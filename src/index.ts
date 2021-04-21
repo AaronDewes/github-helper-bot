@@ -40,6 +40,12 @@ export async function build(context: Context): Promise<void> {
         async (_buildBranch) => {
             BotOctokit.checks.create({
                 ...context.repo(),
+                status: 'in_progress',
+                head_sha: PR.data.head.sha,
+                name: 'umbrel-build'
+            });
+            BotOctokit.checks.update({
+                ...context.repo(),
                 status: 'completed',
                 head_sha: PR.data.head.sha,
                 name: 'umbrel-build'
