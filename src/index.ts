@@ -73,8 +73,8 @@ export async function build(context: Context): Promise<void> {
         );
     }
     const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    const PR = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    PR.scheduleBuild(
+    repo.managePR(context.pullRequest().pull_number);
+    repo.scheduleBuild(
         true,
         context.octokit,
         context.issue().issue_number,
