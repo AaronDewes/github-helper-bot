@@ -28,6 +28,9 @@ export default async function build(
         recursive: true,
     });
     git.init({ fs, dir: folderPath });
+    fs.mkdirSync(path.resolve(folderPath, ".git"), {
+        recursive: true,
+    });
     fs.writeFileSync(path.resolve(folderPath, ".git", "config"), "");
     git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'UmbrelBot' });
     git.setConfig({ fs, dir: folderPath, path: 'user.email', value: 'bot@umbrel.tech' });
