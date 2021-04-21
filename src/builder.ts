@@ -5,7 +5,7 @@ import http from 'isomorphic-git/http/node';
 import fs from 'fs';
 
 import { randomHash, repoExists } from './helpers';
-import { buildOrg } from './consts';
+import { buildOrg, pushToken } from './consts';
 
 export default async function build(
     octokit: InstanceType<typeof ProbotOctokit>,
@@ -39,7 +39,7 @@ export default async function build(
         http,
         dir: folderPath,
         url: pushURL,
-        onAuth: () => ({ username: process.env.PUSH_TOKEN }),
+        onAuth: () => ({ username: pushToken }),
         ref: buildBranch,
     });
     typeof callbackfn === 'function' && callbackfn(buildBranch);
