@@ -25,39 +25,13 @@ export default class PullRequest {
      * false or in 5 minutes (if no new one gets triggered in that time)
      */
     public async scheduleBuild(
-        now = false,
         octokit: InstanceType<typeof ProbotOctokit>,
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
     ): Promise<void> {
-        if (now) {
-            if (typeof this.timeoutID == 'number') {
-                clearTimeout(<number>this.timeoutID);
-                this.timeoutID = false;
-            }
-            build(octokit, this.number, repo, owner, callbackfn);
-            return;
-        }
-        this.timeoutID = setTimeout(build, 5 * 60 * 1000, octokit, this.number, repo, owner, callbackfn);
-    }
-
-    public async addComment(id: number): Promise<void> {
-        this.olderComments?.push(id);
-    }
-
-    public async deleteOldComments(
-        octokit: InstanceType<typeof ProbotOctokit>,
-        owner: string,
-        repo: string,
-    ): Promise<void> {
-        this.olderComments?.forEach((comment) => {
-            octokit.issues.deleteComment({
-                owner,
-                repo,
-                comment_id: comment,
-            });
-        });
+        build(octokit, this.number, repo, owner, callbackfn);
+        return;
     }
 }
 
@@ -84,28 +58,12 @@ export class Repo {
     }
 
     public async scheduleBuild(
-        now = false,
         octokit: InstanceType<typeof ProbotOctokit>,
         pr: number,
         owner: string,
         repo: string,
         callbackfn?: (buildBranch: string) => void,
     ): Promise<void> {
-        this.PRs[pr].scheduleBuild(now, octokit, repo, owner, callbackfn);
-    }
-
-    public async addComment(pr: number, id: number): Promise<void> {
-        this.managePR(pr);
-        this.PRs[pr].addComment(id);
-    }
-
-    public async deleteOldComments(
-        octokit: InstanceType<typeof ProbotOctokit>,
-        pr: number,
-        owner: string,
-        repo: string,
-    ): Promise<void> {
-        this.managePR(pr);
-        this.PRs[pr].deleteOldComments(octokit, owner, repo);
+        this.PRs[pr].scheduleBuild(octokit, repo, owner, callbackfn);
     }
 }

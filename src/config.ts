@@ -22,14 +22,12 @@ export interface UmbrelBotConfig {
     version?: number;
     invalidPRConfig?: InvalidPRConfig;
     blocklist?: string[];
-    prFetchMinutes?: number;
 }
 
 export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
     blocklist: string[];
-    prFetchMinutes: number;
 }
 
 export const defaultConfig: UmbrelBotDefaultConfig = {
@@ -60,7 +58,6 @@ export const defaultConfig: UmbrelBotDefaultConfig = {
         enabled: true,
     },
     blocklist: [],
-    prFetchMinutes: 5,
 };
 
 export async function getConfig(

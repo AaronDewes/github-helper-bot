@@ -19,13 +19,11 @@ export interface UmbrelBotConfig {
     version?: number;
     invalidPRConfig?: InvalidPRConfig;
     blocklist?: string[];
-    prFetchMinutes?: number;
 }
 export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
     blocklist: string[];
-    prFetchMinutes: number;
 }
 export declare const defaultConfig: UmbrelBotDefaultConfig;
 export declare function getConfig(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string): Promise<UmbrelBotConfig>;

@@ -1,27 +1,16 @@
 import { Probot, Context, ProbotOctokit } from 'probot';
 import { Repo } from './pullrequest';
 
-import { comparePRList, getPRs } from './helpers';
 import unfurl from './unfurl/unfurl';
-import { defaultConfig, UmbrelBotConfig, getConfig } from './config';
+import { getConfig } from './config';
 import handleCommand from './commands';
-import { allowedRepoOwners, buildOrg } from './consts';
+import { allowedRepoOwners } from './consts';
 import validatePr from './prValidator';
 
 // Not authenticated yet
 let BotOctokit = new ProbotOctokit();
 
 const managedRepos: Record<string, Repo> = {};
-let openPRs: PRInfo[] = [];
-let lastConfig: UmbrelBotConfig = defaultConfig;
-let lastInterval: NodeJS.Timeout;
-
-export interface PRInfo {
-    number: number;
-    branchName: string;
-    repo: string;
-    head: string;
-}
 
 function getPermissionDeniedError(username: string) {
     return `
@@ -33,38 +22,6 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 `;
 }
 
-async function handleChangedPR(repo: string, number: number) {
-    if (!managedRepos[`getumbrel-${repo}`]) {
-        managedRepos[`getumbrel-${repo}`] = new Repo('getumbrel', repo);
-    }
-    managedRepos[`getumbrel-${repo}`].scheduleBuild(
-        false,
-        BotOctokit,
-        number,
-        'getumbrel',
-        repo,
-        async (buildBranch) => {
-            const comment = await BotOctokit.issues.createComment({
-                owner: 'getumbrel',
-                repo: repo,
-                issue_number: number,
-                body: `Built image to ${buildOrg}/${repo}:${buildBranch}.`,
-            });
-            managedRepos[`getumbrel-${repo}`].deleteOldComments(BotOctokit, number, 'getumbrel', repo);
-            managedRepos[`getumbrel-${repo}`].addComment(number, comment.data.id);
-        },
-    );
-}
-
-async function handleOpenPRs() {
-    const lastOpenPRs = openPRs;
-    openPRs = await getPRs(BotOctokit);
-    const toDo = await comparePRList(lastOpenPRs, openPRs);
-    toDo.forEach(async (pr) => {
-        handleChangedPR(pr.repo, pr.number);
-    });
-}
-
 export async function build(context: Context): Promise<void> {
     if (!managedRepos[`${context.repo().owner}-${context.repo().repo}`]) {
         managedRepos[`${context.repo().owner}-${context.repo().repo}`] = new Repo(
@@ -74,26 +31,19 @@ export async function build(context: Context): Promise<void> {
     }
     const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
     repo.managePR(context.pullRequest().pull_number);
+    const PR = await BotOctokit.pulls.get(context.pullRequest());
     repo.scheduleBuild(
-        true,
         context.octokit,
         context.issue().issue_number,
         context.repo().owner,
         context.repo().repo,
-        async (buildBranch) => {
-            const comment = await BotOctokit.issues.createComment({
-                owner: context.repo().owner,
-                repo: context.repo().repo,
-                issue_number: context.pullRequest().pull_number,
-                body: `Built image to ${buildOrg}/${context.repo().repo}:${buildBranch}.`,
+        async (_buildBranch) => {
+            BotOctokit.checks.create({
+                ...context.repo(),
+                status: 'success',
+                head_sha: PR.data.head.sha,
+                name: 'umbrel-build'
             });
-            repo.deleteOldComments(
-                context.octokit,
-                context.pullRequest().pull_number,
-                context.repo().owner,
-                context.repo().repo,
-            );
-            repo.addComment(context.pullRequest().pull_number, comment.data.id);
         },
     );
 }
@@ -108,11 +58,6 @@ module.exports = (app: Probot) => {
             });
         }
         const config = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
-        if (lastConfig.prFetchMinutes !== config.prFetchMinutes) {
-            clearInterval(lastInterval);
-            lastInterval = setInterval(handleOpenPRs, <number>lastConfig.prFetchMinutes * 60 * 1000);
-        }
-        lastConfig = config;
         if (config.blocklist && config.blocklist.includes(context.payload.sender.login)) {
             console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;
@@ -158,6 +103,7 @@ module.exports = (app: Probot) => {
         }
     });
 
-    /* Check for new/changed PRs every 5min */
-    lastInterval = setInterval(handleOpenPRs, (lastConfig.prFetchMinutes || defaultConfig.prFetchMinutes) * 60 * 1000);
+    app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
+        build(context);
+    });
 };

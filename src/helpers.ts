@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProbotOctokit } from 'probot';
-import { PRInfo } from './index';
-import { GraphQlQueryResponseData } from '@octokit/graphql';
 
 /**
  * Generates a random hex value.
@@ -40,27 +38,6 @@ export async function repoExists(
         return false;
     }
     return true;
-}
-
-/**
- * Compares two lists of PRs and returns the PRs that wer added/changed from list1 to list2
- *
- * @param list1 The first list of PRs
- * @param list2 The second list of PRs
- * @returns {string} All changed/added PRs between list1 and list2
- */
-export async function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise<PRInfo[]> {
-    const resultingPRs: PRInfo[] = [];
-    list2.forEach((pr, number) => {
-        if (!list1[number]) {
-            resultingPRs.push(pr);
-        } else {
-            if (list1[number].head !== pr.head) {
-                resultingPRs.push(pr);
-            }
-        }
-    });
-    return resultingPRs;
 }
 
 /**
@@ -165,68 +142,4 @@ export async function hasPushAccess(
     const level = permissionResponse.data.permission;
 
     return level === 'admin' || level === 'write';
-}
-
-function buildQuery(after?: string) {
-    return `
-  {
-    search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100, ${
-        after ? 'after: ' + after : ''
-    }) {
-      pageInfo { 
-        hasNextPage
-        endCursor
-      }
-      edges {
-        node {
-          ... on PullRequest {
-            number,
-            headRefName,
-            commits(last: 1) {
-              edges {
-                node {
-                  commit {
-                  abbreviatedOid
-                  }
-                }
-              }
-            }
-            baseRepository {
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-}
-
-/**
- * Get a list of Pull requests
- *
- * @param octokit A GrapQL octokit instance
- * @returns {PRInfo[]} An array of pull requests with basic information about them
- */
-export async function getPRs(octokit: InstanceType<typeof ProbotOctokit>): Promise<PRInfo[]> {
-    const fetchedData: GraphQlQueryResponseData = await octokit.graphql(buildQuery());
-    let hasNextPage = fetchedData.data.search.pageInfo.hasNextPage;
-    let endCursor = fetchedData.data.search.pageInfo.endCursor;
-    while (hasNextPage == true) {
-        const nowFetched: GraphQlQueryResponseData = await octokit.graphql(buildQuery(endCursor));
-        hasNextPage = nowFetched.data.search.pageInfo.hasNextPage;
-        endCursor = fetchedData.data.search.pageInfo.endCursor;
-        fetchedData.data.search.edges = [...fetchedData.data.search.edges, ...nowFetched.data.search.edges];
-    }
-    const result: PRInfo[] = [];
-    fetchedData.data.search.edges.forEach((node: any) => {
-        const subNode = node.node;
-        result.push({
-            branchName: subNode.headRefName,
-            head: subNode.commits.edges[0].subNode.commit.abbreviatedOid,
-            repo: subNode.baseRepository.name,
-            number: subNode.number,
-        });
-    });
-    return result;
 }
