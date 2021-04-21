@@ -27,19 +27,12 @@ export default async function build(
     fs.mkdirSync(folderPath, {
         recursive: true,
     });
-    git.init({ fs, dir: folderPath });
-    fs.mkdirSync(path.resolve(folderPath, ".git"), {
-        recursive: true,
-    });
-    fs.writeFileSync(path.resolve(folderPath, ".git", "config"), "");
-    git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'UmbrelBot' });
-    git.setConfig({ fs, dir: folderPath, path: 'user.email', value: 'bot@umbrel.tech' });
-    git.fetch({ fs, http, dir: folderPath, url: prInfo.data.head.repo.clone_url });
-    git.checkout({ fs, dir: folderPath, ref: prInfo.data.head.sha });
-    git.pull({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url });
-    git.branch({ fs, dir: folderPath, ref: buildBranch });
-    git.checkout({ fs, dir: folderPath, ref: buildBranch });
-    git.push({
+    await git.clone({ fs, http, dir: folderPath, url: prInfo.data.head.repo.clone_url });
+    await git.checkout({ fs, dir: folderPath, ref: prInfo.data.head.sha });
+    await git.pull({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url });
+    await git.branch({ fs, dir: folderPath, ref: buildBranch });
+    await git.checkout({ fs, dir: folderPath, ref: buildBranch });
+    await  git.push({
         fs,
         http,
         dir: folderPath,
