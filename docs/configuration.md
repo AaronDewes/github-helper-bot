@@ -5,7 +5,7 @@ This bot is configured in one of your repos, but changes apply to all of them.
 To configure the bot, create a file `.github/UmbrelBot.yml` with the following content (change it to fit your needs):
 
 ```yaml
-version: 0
+version: 1
 invalidPRConfig:
         # true if invalid PR detection should be enabled
         enabled: true
@@ -36,6 +36,4 @@ invalidPRConfig:
         labelColor: 'e6e6e6'
     # Which users shouldn't be allowed to use the bot
     blocklist: []
-    # The amount of minutes waited before fetching new PRs. Even 1 Minute should work, but be aware that on bigger repos, you might hit an API ratelimit
-    prFetchMinutes: 5
 ```
