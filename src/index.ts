@@ -40,7 +40,7 @@ export async function build(context: Context): Promise<void> {
         async (_buildBranch) => {
             BotOctokit.checks.create({
                 ...context.repo(),
-                status: 'success',
+                status: 'completed',
                 head_sha: PR.data.head.sha,
                 name: 'umbrel-build'
             });
@@ -104,7 +104,6 @@ module.exports = (app: Probot) => {
     });
 
     app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
-        console.log("Building");
         build(context);
     });
 };
