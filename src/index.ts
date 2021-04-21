@@ -99,9 +99,8 @@ export async function build(context: Context): Promise<void> {
 }
 
 module.exports = (app: Probot) => {
-    BotOctokit = new ProbotOctokit();
-    /* Parse comments */
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
+        BotOctokit = context.octokit;
         if (!allowedRepoOwners.includes(context.issue().owner)) {
             context.octokit.issues.createComment({
                 ...context.issue(),
