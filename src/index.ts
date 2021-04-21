@@ -37,17 +37,19 @@ export async function build(context: Context): Promise<void> {
         context.issue().issue_number,
         context.repo().owner,
         context.repo().repo,
-        async (_buildBranch) => {
+        async (buildBranch) => {
             BotOctokit.checks.create({
                 ...context.repo(),
                 status: 'completed',
                 conclusion: 'success',
                 output: {
-                    title: "Started build of the image",
-                    summary: `The image will soon be on Docker Hub as umbrelbuilds/${context.repo().repo.replace("umbrel-", "")}:pr-${prInfo.data.number}-${prInfo.data.head.ref}-${prInfo.data.head.sha.substring(0, 7)}`
+                    title: 'Started build of the image',
+                    summary: `The image will soon be on Docker Hub as umbrelbuilds/${context
+                        .repo()
+                        .repo.replace('umbrel-', '')}:${buildBranch}`,
                 },
                 head_sha: prInfo.data.head.sha,
-                name: 'umbrel-build'
+                name: 'umbrel-build',
             });
         },
     );
