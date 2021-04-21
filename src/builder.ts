@@ -28,6 +28,7 @@ export default async function build(
         recursive: true,
     });
     git.init({ fs, dir: folderPath });
+    fs.writeFileSync(path.resolve(folderPath, ".git", "config"), "");
     git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'UmbrelBot' });
     git.setConfig({ fs, dir: folderPath, path: 'user.email', value: 'bot@umbrel.tech' });
     git.fetch({ fs, http, dir: folderPath, url: prInfo.data.head.repo.clone_url });
