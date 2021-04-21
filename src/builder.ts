@@ -31,7 +31,7 @@ export default async function build(
     await git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'UmbrelBot' });
     await git.setConfig({ fs, dir: folderPath, path: 'user.email', value: 'bot@umbrel.tech' });
     await git.checkout({ fs, dir: folderPath, ref: prInfo.data.head.sha });
-    await git.pull({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url });
+    await git.pull({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url, ref: 'master' });
     await git.branch({ fs, dir: folderPath, ref: buildBranch });
     await git.checkout({ fs, dir: folderPath, ref: buildBranch });
     await  git.push({
