@@ -31,7 +31,7 @@ export async function build(context: Context): Promise<void> {
     }
     const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
     repo.managePR(context.pullRequest().pull_number);
-    const PR = await BotOctokit.pulls.get(context.pullRequest());
+    const prInfo = await BotOctokit.pulls.get(context.pullRequest());
     repo.scheduleBuild(
         context.octokit,
         context.issue().issue_number,
@@ -40,14 +40,9 @@ export async function build(context: Context): Promise<void> {
         async (_buildBranch) => {
             BotOctokit.checks.create({
                 ...context.repo(),
-                status: 'in_progress',
-                head_sha: PR.data.head.sha,
-                name: 'umbrel-build'
-            });
-            BotOctokit.checks.update({
-                ...context.repo(),
                 status: 'completed',
-                head_sha: PR.data.head.sha,
+                conclusion: `Built image to Docker Hub on umbrelbuilds/${context.repo().repo.replace("umbrel-", "")}:pr-${prInfo.data.number}-${prInfo.data.head.ref}-${prInfo.data.head.sha.substring(0, 7)}`,
+                head_sha: prInfo.data.head.sha,
                 name: 'umbrel-build'
             });
         },
