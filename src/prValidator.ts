@@ -8,7 +8,7 @@ export default async function validatePr(context: Context): Promise<void> {
     const config = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
     if (!config.invalidPRConfig?.enabled) return;
     const username = context.payload.pull_request.user.login;
-    const canPush = await hasPushAccess(context, context.repo({ username }));
+    const canPush = await hasPushAccess(context.octokit, context.repo().owner, context.repo().repo, username);
     const data = Object.assign({ has_push_access: canPush }, context.payload);
     const filters = config.invalidPRConfig?.filters || defaultConfig.invalidPRConfig.filters;
     if (

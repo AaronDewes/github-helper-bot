@@ -9,7 +9,7 @@ export default class CmdLabel extends Command {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static override run(context: Context, args: string, _isPR: boolean): void {
-        if (labelExists(context, args)) {
+        if (labelExists(context.octokit, context.repo().owner, context.repo().repo, args)) {
             addLabel(context.octokit, context.repo().owner, context.repo().repo, context.issue().issue_number, args, '');
         } else {
             context.octokit.issues.createComment({ ...context.issue(), body: `This label could not be found.` });

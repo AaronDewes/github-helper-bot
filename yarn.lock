@@ -338,12 +338,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^6.0.1, @octokit/types@npm:^6.0.3, @octokit/types@npm:^6.1.1, @octokit/types@npm:^6.10.0, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.12.2, @octokit/types@npm:^6.13.0, @octokit/types@npm:^6.7.1":
-  version: 6.13.0
-  resolution: "@octokit/types@npm:6.13.0"
+"@octokit/types@npm:^6.0.1, @octokit/types@npm:^6.0.3, @octokit/types@npm:^6.1.1, @octokit/types@npm:^6.10.0, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.12.2, @octokit/types@npm:^6.13.0, @octokit/types@npm:^6.13.1, @octokit/types@npm:^6.7.1":
+  version: 6.13.1
+  resolution: "@octokit/types@npm:6.13.1"
   dependencies:
     "@octokit/openapi-types": ^6.0.0
-  checksum: 9b2d8631f351bf368bcd90e46a39fae42b5c821b6f66275ee2504bbfb0c6ac7dfc045c6585ce346f37ceb3979dde0de241d777a4e7cd1310eaff0318bfc7e4a9
+  checksum: 0437a49478b896c552a229c10cd950a7c3e3fff431b765b6b0aa9568b9653f1328057078aff7115cc1e83e0600d49264acb46011d291baf4a7dc71ec49d42e6c
   languageName: node
   linkType: hard
 
@@ -2544,7 +2544,7 @@ __metadata:
     "@octokit/core": ^3.4.0
     "@octokit/graphql": ^4.6.1
     "@octokit/rest": ^18.5.2
-    "@octokit/types": ^6.13.0
+    "@octokit/types": ^6.13.1
     "@types/jsdom": ^16.2.10
     "@types/jsonpath": ^0.2.0
     "@types/marked": ^2.0.2

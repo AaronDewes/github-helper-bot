@@ -27,7 +27,7 @@
     "unfurl.js": "^5.2.5"
   },
   "devDependencies": {
-    "@octokit/types": "^6.13.0",
+    "@octokit/types": "^6.13.1",
     "@types/jsdom": "^16.2.10",
     "@types/jsonpath": "^0.2.0",
     "@types/marked": "^2.0.2",

@@ -1,5 +1,4 @@
-import { RestEndpointMethodTypes } from '@octokit/rest';
-import { Context, ProbotOctokit } from 'probot';
+import { ProbotOctokit } from 'probot';
 import { PRInfo } from './index';
 export declare function randomHash(count: number): string;
 export declare function repoExists(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string): Promise<boolean>;
@@ -7,6 +6,6 @@ export declare function comparePRList(list1: PRInfo[], list2: PRInfo[]): Promise
 export declare function addLabel(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number, name: string, color: string): Promise<void>;
 export declare function closeIssue(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number): Promise<void>;
 export declare function ensureLabelExists(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, name: string, color: string): Promise<void>;
-export declare function labelExists(context: Context, name: string): Promise<boolean>;
-export declare function hasPushAccess(context: Context, params: RestEndpointMethodTypes['repos']['getCollaboratorPermissionLevel']['parameters']): Promise<boolean>;
+export declare function labelExists(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, name: string): Promise<boolean>;
+export declare function hasPushAccess(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, username: string): Promise<boolean>;
 export declare function getPRs(octokit: InstanceType<typeof ProbotOctokit>): Promise<PRInfo[]>;

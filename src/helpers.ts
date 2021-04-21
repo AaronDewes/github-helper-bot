@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { RestEndpointMethodTypes } from '@octokit/rest';
-import { Context, ProbotOctokit } from 'probot';
+import { ProbotOctokit } from 'probot';
 import { PRInfo } from './index';
 import { GraphQlQueryResponseData } from '@octokit/graphql';
 
@@ -126,23 +125,81 @@ export async function ensureLabelExists(
     }
 }
 
-export async function labelExists(context: Context, name: string): Promise<boolean> {
+/**
+ * Checks if a label exists on a GitHub repo
+ *
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
+ * @param {string} owner The owner of the repo to check
+ * @param {string} repo The name of the repo to check
+ * @param {string} name The name of the label
+ */
+export async function labelExists(
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+    name: string,
+): Promise<boolean> {
     try {
-        await context.octokit.issues.getLabel(context.repo({ name }));
+        await octokit.issues.getLabel({ owner, repo, name });
         return true;
     } catch (e) {
         return false;
     }
 }
 
+/**
+ * Checks if an user has push access to a repo
+ *
+ * @param {ProbotOctokit} octokit An octokit instance with probot plugins
+ * @param {string} owner The owner of the repo to check
+ * @param {string} repo The name of the repo to check
+ * @param {string} username The GitHub username of the user
+ */
 export async function hasPushAccess(
-    context: Context,
-    params: RestEndpointMethodTypes['repos']['getCollaboratorPermissionLevel']['parameters'],
+    octokit: InstanceType<typeof ProbotOctokit>,
+    owner: string,
+    repo: string,
+    username: string,
 ): Promise<boolean> {
-    const permissionResponse = await context.octokit.repos.getCollaboratorPermissionLevel(params);
+    const permissionResponse = await octokit.repos.getCollaboratorPermissionLevel({ owner, repo, username });
     const level = permissionResponse.data.permission;
 
     return level === 'admin' || level === 'write';
+}
+
+function buildQuery(after?: string) {
+    return `
+  {
+    search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100, ${
+        after ? 'after: ' + after : ''
+    }) {
+      pageInfo { 
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          ... on PullRequest {
+            number,
+            headRefName,
+            commits(last: 1) {
+              edges {
+                node {
+                  commit {
+                  abbreviatedOid
+                  }
+                }
+              }
+            }
+            baseRepository {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 }
 
 /**
@@ -152,73 +209,11 @@ export async function hasPushAccess(
  * @returns {PRInfo[]} An array of pull requests with basic information about them
  */
 export async function getPRs(octokit: InstanceType<typeof ProbotOctokit>): Promise<PRInfo[]> {
-    const fetchedData: GraphQlQueryResponseData = await octokit.graphql(
-        `
-      {
-        search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100) {
-          pageInfo { 
-            hasNextPage
-            endCursor
-          }
-          edges {
-            node {
-              ... on PullRequest {
-                number,
-                headRefName,
-                commits(last: 1) {
-                  edges {
-                    node {
-                      commit {
-                      abbreviatedOid
-                      }
-                    }
-                  }
-                }
-                baseRepository {
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-    );
+    const fetchedData: GraphQlQueryResponseData = await octokit.graphql(buildQuery());
     let hasNextPage = fetchedData.data.search.pageInfo.hasNextPage;
     let endCursor = fetchedData.data.search.pageInfo.endCursor;
     while (hasNextPage == true) {
-        const nowFetched: GraphQlQueryResponseData = await octokit.graphql(
-            `
-        {
-          search(query: "org:getumbrel is:pr is:open draft:false", type: ISSUE, first: 100, after: ${endCursor}) {
-            pageInfo { 
-              hasNextPage
-              endCursor
-            }
-            edges {
-              node {
-                ... on PullRequest {
-                  number,
-                  headRefName,
-                  commits(last: 1) {
-                    edges {
-                      node {
-                        commit {
-                        abbreviatedOid
-                        }
-                      }
-                    }
-                  }
-                  baseRepository {
-                    name
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-        );
+        const nowFetched: GraphQlQueryResponseData = await octokit.graphql(buildQuery(endCursor));
         hasNextPage = nowFetched.data.search.pageInfo.hasNextPage;
         endCursor = fetchedData.data.search.pageInfo.endCursor;
         fetchedData.data.search.edges = [...fetchedData.data.search.edges, ...nowFetched.data.search.edges];
