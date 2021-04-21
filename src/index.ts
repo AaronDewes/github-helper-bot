@@ -104,6 +104,7 @@ module.exports = (app: Probot) => {
     });
 
     app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
+        console.log("Building");
         build(context);
     });
 };
