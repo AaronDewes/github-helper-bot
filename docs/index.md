@@ -2,7 +2,7 @@
 
 The UmbrelBot provides a few useful tools to make development on GitHub faster and easier.
 
-In the current version, `0.0.1-beta.1`, it provides the following features:
+In the current version, `0.1.0`, it provides the following features:
 
 #### Automated actions
 

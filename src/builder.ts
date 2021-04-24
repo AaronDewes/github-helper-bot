@@ -34,7 +34,7 @@ export default async function build(
     await git.pull({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url, ref: 'master' });
     await git.branch({ fs, dir: folderPath, ref: buildBranch });
     await git.checkout({ fs, dir: folderPath, ref: buildBranch });
-    await  git.push({
+    await git.push({
         fs,
         http,
         dir: folderPath,

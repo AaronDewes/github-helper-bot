@@ -71,10 +71,10 @@ export async function remind(context: Context, args: string): Promise<void> {
 export default class CmdRemind extends Command {
     // TODO: Remove this when Prettier supports override
     // eslint-disable-next-line
-    static override helptext = 'Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).';
+    static helptext = 'Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).';
     // Don't use an actual person on GitHub to avoid spamming their notifications, I hope no one is using the octocat account.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static override run(context: Context, args: string, _isPR: boolean): void {
+    static run(context: Context, args: string, _isPR: boolean): void {
         remind(context, args);
     }
 }

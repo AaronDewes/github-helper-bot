@@ -17,7 +17,6 @@
         "typeRoots": [
             "src/types"
         ],
-        "noImplicitOverride": true,
         "removeComments": true, // JS files are just build assets and shouldn't be read/modified
         "declaration": true
     },

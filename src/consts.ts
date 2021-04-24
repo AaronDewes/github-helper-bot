@@ -14,6 +14,6 @@ export const buildOrg = process.env.BUILD_ORG || 'UmbrelBuilds';
 
 export const pushToken = process.env.GH_PUSH_TOKEN;
 
-export const version = '0.0.1-beta.1';
+export const version = '0.1.0';
 
 export const configVersion = 1;
