@@ -46,7 +46,7 @@ export async function getAppUpgrades(): Promise<string> {
         const appVersion = app.version;
         if(app.id === "lnbits") {
             const lnbitsRepo = await octokit.rest.repos.getCommit({owner: "lnbits", repo: "lnbits", ref: "master"});
-            if(lnbitsRepo.data.commit.tree.sha !== app.version) {
+            if(lnbitsRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
                 potentialUpdates.push({
                     umbrel: appVersion,
                     current: lnbitsRepo.data.commit.tree.sha,
