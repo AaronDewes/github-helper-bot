@@ -2,7 +2,7 @@
 
 The UmbrelBot provides a few useful tools to make development on GitHub faster and easier.
 
-In the current version, `0.1.0`, it provides the following features:
+In the current version, `0.1.1`, it provides the following features:
 
 #### Automated actions
 
@@ -13,7 +13,6 @@ In the current version, `0.1.0`, it provides the following features:
 #### Commands
 
 - `/help`: Displays a list of available commands
-- `/build`: This command builds the current PR branch. Builds normally happen automatically, but you can use this command if you don't want to wait.
 - `/label`: This adds a label to the current PR/issue.
 - `/remind`: Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).
 - `/version`: Outputs the current version of this bot.

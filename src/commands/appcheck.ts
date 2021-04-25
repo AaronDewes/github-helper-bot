@@ -29,7 +29,7 @@ interface VersionDiff {
     current: string;
 }
 
-export async function getAppUpgrades(): Promise<string> {
+async function getAppUpgrades(): Promise<string> {
     const octokit = new Octokit();
     const data: UmbrelApp[] = await (
         await fetch('https://raw.githubusercontent.com/getumbrel/umbrel/master/apps/registry.json')
@@ -44,12 +44,12 @@ export async function getAppUpgrades(): Promise<string> {
         const repoInfo = app.repo.replace('https://github.com/', '').split('/');
         let tagName = '';
         const appVersion = app.version;
-        if(app.id === "lnbits") {
-            const lnbitsRepo = await octokit.rest.repos.getCommit({owner: "lnbits", repo: "lnbits", ref: "master"});
-            if(lnbitsRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
+        if (app.id === 'lnbits') {
+            const lnbitsRepo = await octokit.rest.repos.getCommit({ owner: 'lnbits', repo: 'lnbits', ref: 'master' });
+            if (lnbitsRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
                 potentialUpdates.push({
                     umbrel: appVersion,
-                    current: lnbitsRepo.data.commit.tree.sha,
+                    current: lnbitsRepo.data.commit.tree.sha.substr(0, 7),
                     app: app.name,
                 });
             }
@@ -57,7 +57,7 @@ export async function getAppUpgrades(): Promise<string> {
         } else {
             const tagList = await octokit.rest.repos.listTags({ owner: repoInfo[0], repo: repoInfo[1] });
             for (const tag of tagList.data) {
-                if (!semver.valid(app.version) && app.id !== "lnbits") {
+                if (!semver.valid(app.version) && app.id !== 'lnbits') {
                     console.info('Not a valid semver.');
                     continue;
                 }

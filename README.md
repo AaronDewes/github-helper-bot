@@ -22,12 +22,3 @@ This bot can listen for PRs and push them to a seperate GitHub org for building 
 ### Current status
 
 This code is untested and not production-ready.
-
-### Useful tools
-
-#### Check for Umbrel releases from CLI
-
-- Install all dependencies using `yarn`
-- Let it fetch app info: `yarn node tests/appcheck.js`
-
-BTCPayPayServer isn't using semantic versioning and not supported because of that.

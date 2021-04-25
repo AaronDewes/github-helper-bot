@@ -1,16 +1,14 @@
 import { Probot, Context, ProbotOctokit } from 'probot';
-import { Repo } from './pullrequest';
 
 import unfurl from './unfurl/unfurl';
-import { getConfig } from './config';
+import { getConfig, UmbrelBotConfig } from './config';
 import handleCommand from './commands';
 import { allowedRepoOwners } from './consts';
 import validatePr from './prValidator';
+import runBuild from './builder';
 
 // Not authenticated yet
 let BotOctokit = new ProbotOctokit();
-
-const managedRepos: Record<string, Repo> = {};
 
 function getPermissionDeniedError(username: string) {
     return `
@@ -22,21 +20,13 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 `;
 }
 
-export async function build(context: Context): Promise<void> {
-    if (!managedRepos[`${context.repo().owner}-${context.repo().repo}`]) {
-        managedRepos[`${context.repo().owner}-${context.repo().repo}`] = new Repo(
-            context.repo().owner,
-            context.repo().repo,
-        );
-    }
-    const repo = managedRepos[`${context.repo().owner}-${context.repo().repo}`];
-    repo.managePR(context.pullRequest().pull_number);
+async function build(context: Context): Promise<void> {
     const prInfo = await BotOctokit.pulls.get(context.pullRequest());
-    repo.scheduleBuild(
+    runBuild(
         context.octokit,
-        context.issue().issue_number,
         context.repo().owner,
         context.repo().repo,
+        context.pullRequest().pull_number,
         async (buildBranch) => {
             BotOctokit.checks.create({
                 ...context.repo(),
@@ -64,7 +54,7 @@ module.exports = (app: Probot) => {
                 body: getPermissionDeniedError(context.issue().owner),
             });
         }
-        const config = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
+        const config: UmbrelBotConfig = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
         if (config.blocklist && config.blocklist.includes(context.payload.sender.login)) {
             console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;
@@ -103,12 +93,6 @@ module.exports = (app: Probot) => {
     });
 
     app.on('pull_request.opened', validatePr);
-
-    app.on(['pull_request.closed', 'pull_request.merged'], async (context) => {
-        if (managedRepos[`getumbrel-${context.pullRequest().repo}`]) {
-            managedRepos[`getumbrel-${context.pullRequest().repo}`].stopManagingPR(context.pullRequest().pull_number);
-        }
-    });
 
     app.on(['pull_request.opened', 'pull_request.synchronize'], async (context) => {
         BotOctokit = context.octokit;

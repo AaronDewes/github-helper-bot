@@ -1,7 +1,7 @@
 import { ProbotOctokit } from 'probot';
 import { configVersion } from './consts';
 
-export interface InvalidPRConfig {
+interface InvalidPRConfig {
     enabled?: boolean;
     filters?: string[];
     commentBody?: string;
@@ -10,7 +10,7 @@ export interface InvalidPRConfig {
     labelColor?: string;
 }
 
-export interface InvalidPRDefaultConfig extends InvalidPRConfig {
+interface InvalidPRDefaultConfig extends InvalidPRConfig {
     enabled: boolean;
     filters: string[];
     commentBody: string;
@@ -24,7 +24,7 @@ export interface UmbrelBotConfig {
     blocklist?: string[];
 }
 
-export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
+interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
     blocklist: string[];

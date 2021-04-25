@@ -9,9 +9,9 @@ import { buildOrg, pushToken } from './consts';
 
 export default async function build(
     octokit: InstanceType<typeof ProbotOctokit>,
-    pr: number,
     owner: string,
     repo: string,
+    pr: number,
     callbackfn?: (buildBranch: string) => void,
 ): Promise<void> {
     const prInfo = await octokit.pulls.get({ pull_number: pr, owner, repo });

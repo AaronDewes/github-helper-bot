@@ -1,13 +1,19 @@
 {
   "name": "github-helper-bot",
+  "description": "A GitHub bot for Umbrel, built using probot",
   "scripts": {
     "build": "tsc",
     "start": "probot run ./lib/index.js",
     "lint": "eslint src --fix"
   },
+  "license": "AGPL-3.0-or-later",
+  "version": "0.1.1",
+  "author": "Aaron Dewes <aaron.dewes@web.de>",
+  "repository": {
+    "url": "https://github.com/AaronDewes/github-helper-bot"
+  },
   "dependencies": {
     "@octokit/core": "^3.4.0",
-    "@octokit/graphql": "^4.6.1",
     "@octokit/rest": "^18.5.3",
     "body-parser": "^1.19.0",
     "bottleneck": "^2.19.5",
@@ -17,21 +23,18 @@
     "isomorphic-git": "^1.8.2",
     "jsdom": "^16.5.3",
     "jsonpath": "^1.1.1",
-    "marked": "^2.0.3",
-    "marked-terminal": "^4.1.1",
     "node-fetch": "^2.6.1",
     "parse-reminder": "^1.3.0",
     "probot": "^11.2.2",
     "probot-attachments": "^1.0.1",
     "semver": "^7.3.5",
+    "ts-unused-exports": "^7.0.3",
     "unfurl.js": "^5.2.5"
   },
   "devDependencies": {
     "@octokit/types": "^6.13.2",
     "@types/jsdom": "^16.2.10",
     "@types/jsonpath": "^0.2.0",
-    "@types/marked": "^2.0.2",
-    "@types/marked-terminal": "^3.1.1",
     "@types/node": "^14.14.41",
     "@types/node-fetch": "^2.5.10",
     "@types/semver": "^7.3.4",

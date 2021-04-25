@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProbotOctokit } from 'probot';
 
 /**
@@ -88,7 +87,7 @@ export async function closeIssue(
  * @param {string} name The name of the label
  * @param {string} color The color that the label should have if it's not present (hex string)
  */
-export async function ensureLabelExists(
+async function ensureLabelExists(
     octokit: InstanceType<typeof ProbotOctokit>,
     owner: string,
     repo: string,

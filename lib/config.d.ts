@@ -1,5 +1,5 @@
 import { ProbotOctokit } from 'probot';
-export interface InvalidPRConfig {
+interface InvalidPRConfig {
     enabled?: boolean;
     filters?: string[];
     commentBody?: string;
@@ -7,7 +7,7 @@ export interface InvalidPRConfig {
     labelName?: string;
     labelColor?: string;
 }
-export interface InvalidPRDefaultConfig extends InvalidPRConfig {
+interface InvalidPRDefaultConfig extends InvalidPRConfig {
     enabled: boolean;
     filters: string[];
     commentBody: string;
@@ -20,10 +20,11 @@ export interface UmbrelBotConfig {
     invalidPRConfig?: InvalidPRConfig;
     blocklist?: string[];
 }
-export interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
+interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRDefaultConfig;
     blocklist: string[];
 }
 export declare const defaultConfig: UmbrelBotDefaultConfig;
 export declare function getConfig(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string): Promise<UmbrelBotConfig>;
+export {};

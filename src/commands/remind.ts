@@ -34,7 +34,7 @@ async function postReminder(context: Context, text: string, author: string, targ
  * @param context The Probot context
  * @param args The arguments to the /remind command
  */
-export async function remind(context: Context, args: string): Promise<void> {
+async function remind(context: Context, args: string): Promise<void> {
     const reminder: parsedReminder = parseReminder(`remind ${args}`, '');
 
     if (reminder) {
