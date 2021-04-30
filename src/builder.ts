@@ -23,7 +23,7 @@ export default async function build(
         return;
     }
     const pushURL = (await octokit.rest.repos.get({ repo: repo, owner: buildOrg })).data.clone_url;
-    const jobId = randomBytes(256).toString('hex');
+    const jobId = randomBytes(256).toString('hex').substring(0, 10);
     const buildBranch = `pr-${prInfo.data.number}-${prInfo.data.head.ref}-${prInfo.data.head.sha.substring(0, 7)}`;
     const folderPath = path.resolve('./private', jobId);
     fs.mkdirSync(folderPath, {
