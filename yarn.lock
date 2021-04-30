@@ -218,10 +218,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@octokit/openapi-types@npm:6.2.0"
-  checksum: d7f0fac744cc987de6fa54eb6058a8b8d2c62e7aa22ea784f831659439f1944848c29a50d677ad4119f0d09235e800718eabff2676de339f4db3fa4b181c1bfe
+"@octokit/openapi-types@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "@octokit/openapi-types@npm:6.2.1"
+  checksum: c07c073459bc072ba9c2ae9b76720f52b598e359741c47b172a67126fa4d1556ac214613d3e51e0426e1019d2242125df0ad149008b0b7062a590a6c0bf1daf5
   languageName: node
   linkType: hard
 
@@ -326,12 +326,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/types@npm:^6.0.1, @octokit/types@npm:^6.0.3, @octokit/types@npm:^6.1.1, @octokit/types@npm:^6.10.0, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.12.2, @octokit/types@npm:^6.13.1, @octokit/types@npm:^6.14.0, @octokit/types@npm:^6.7.1":
-  version: 6.14.0
-  resolution: "@octokit/types@npm:6.14.0"
+"@octokit/types@npm:^6.0.1, @octokit/types@npm:^6.0.3, @octokit/types@npm:^6.1.1, @octokit/types@npm:^6.10.0, @octokit/types@npm:^6.11.0, @octokit/types@npm:^6.12.2, @octokit/types@npm:^6.13.1, @octokit/types@npm:^6.14.1, @octokit/types@npm:^6.7.1":
+  version: 6.14.1
+  resolution: "@octokit/types@npm:6.14.1"
   dependencies:
-    "@octokit/openapi-types": ^6.2.0
-  checksum: 61520bf59f3871db537e883d3a12a73b85d5009041fec33777a98014f49aa664cb4e1c063ae0936e05c77e4224ff3627dd2ab9c25700a7839d90e298650cacc1
+    "@octokit/openapi-types": ^6.2.1
+  checksum: 5c5a16e6c9c4a310b97d98711d5c6f1bf8571fe152d488613b3454d759cdaaef9cba75c50e6c10857f53307a12beaf190d4357b065fed54b783ecc956e0ce9c3
   languageName: node
   linkType: hard
 
@@ -2477,7 +2477,7 @@ __metadata:
   dependencies:
     "@octokit/core": ^3.4.0
     "@octokit/rest": ^18.5.3
-    "@octokit/types": ^6.14.0
+    "@octokit/types": ^6.14.1
     "@types/jsdom": ^16.2.10
     "@types/jsonpath": ^0.2.0
     "@types/node": ^15.0.1
@@ -2499,8 +2499,7 @@ __metadata:
     node-fetch: ^2.6.1
     parse-reminder: ^1.3.0
     prettier: ^2.2.1
-    probot: ^11.2.3
-    probot-attachments: ^1.0.1
+    probot: ^11.3.0
     semver: ^7.3.5
     ts-unused-exports: ^7.0.3
     typescript: ^4.2.4
@@ -4015,16 +4014,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"probot-attachments@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "probot-attachments@npm:1.0.1"
-  checksum: 5d794a2b6a62df507e3501b6536cf2eb08f51ade7e12a7a598250d5842753a0250ea56185c9c25493a58a6a33106bcb0284c25515bccb0f8f1ecfa9e1f1082e7
-  languageName: node
-  linkType: hard
-
-"probot@npm:^11.2.3":
-  version: 11.2.3
-  resolution: "probot@npm:11.2.3"
+"probot@npm:^11.3.0":
+  version: 11.3.0
+  resolution: "probot@npm:11.3.0"
   dependencies:
     "@octokit/core": ^3.2.4
     "@octokit/plugin-enterprise-compatibility": ^1.2.8
@@ -4063,7 +4055,7 @@ __metadata:
     uuid: ^8.3.2
   bin:
     probot: bin/probot.js
-  checksum: df93cde3e7f31f8a875525bc104e02a271d9e57f571f43e69a9aa68a5bd982b0bec8c5a5d1196888b46c9e77932b5901ac6d223f203cb34988f1bd8dcda88bc6
+  checksum: 452669c5946d590a7957710a9fe7785b7d7f2f06682c6184c8a898dbb101e52b4556d5c4b0c48dac478202ae74388fe8c2f6419396058f09afae78ccfd5de775
   languageName: node
   linkType: hard
 

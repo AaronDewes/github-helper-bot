@@ -1,6 +1,5 @@
 import { Probot, Context, ProbotOctokit } from 'probot';
 
-import unfurl from './unfurl/unfurl';
 import { getConfig, UmbrelBotConfig } from './config';
 import handleCommand from './commands';
 import { allowedRepoOwners } from './consts';
@@ -77,19 +76,6 @@ module.exports = (app: Probot) => {
         if (comment && comment.body?.trim() == `${command[1]} ${command[2]}`) {
             context.octokit.issues.deleteComment({ ...context.issue(), comment_id: comment.id });
         }
-    });
-
-    app.on(['issue_comment.created'], async (context) => {
-        const comment = await context.octokit.issues.getComment({
-            ...context.repo(),
-            id: context.payload.comment.id,
-        });
-        return unfurl(context, <string>comment.data.body_html);
-    });
-
-    app.on(['issues.opened', 'pull_request.opened'], async (context) => {
-        const issue = await context.octokit.issues.getComment(context.issue());
-        return unfurl(context, <string>issue.data.body_html);
     });
 
     app.on('pull_request.opened', validatePr);

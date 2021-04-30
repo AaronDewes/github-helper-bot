@@ -7,8 +7,8 @@ export default class CmdLabel extends Command {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static run(context: Context, args: string, _isPR: boolean): void {
-        if (labelExists(context.octokit, context.repo().owner, context.repo().repo, args)) {
-            try {
+        try {
+            if (labelExists(context.octokit, context.repo().owner, context.repo().repo, args)) {
                 addLabel(
                     context.octokit,
                     context.repo().owner,
@@ -17,11 +17,11 @@ export default class CmdLabel extends Command {
                     args,
                     '',
                 );
-            } catch {
-                context.octokit.issues.createComment({ ...context.issue(), body: `This label could not be found.` });
+            } else {
+                context.octokit.issues.createComment({ ...context.issue(), body: 'This label could not be found.' });
             }
-        } else {
-            context.octokit.issues.createComment({ ...context.issue(), body: `This label could not be found.` });
+        } catch {
+            context.octokit.issues.createComment({ ...context.issue(), body: 'This label could not be found.' });
         }
     }
 }

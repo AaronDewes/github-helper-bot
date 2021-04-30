@@ -2,15 +2,6 @@ import { ProbotOctokit } from 'probot';
 import { configVersion } from './consts';
 
 interface InvalidPRConfig {
-    enabled?: boolean;
-    filters?: string[];
-    commentBody?: string;
-    addLabel?: boolean;
-    labelName?: string;
-    labelColor?: string;
-}
-
-interface InvalidPRDefaultConfig extends InvalidPRConfig {
     enabled: boolean;
     filters: string[];
     commentBody: string;
@@ -19,18 +10,12 @@ interface InvalidPRDefaultConfig extends InvalidPRConfig {
     labelColor: string;
 }
 export interface UmbrelBotConfig {
-    version?: number;
-    invalidPRConfig?: InvalidPRConfig;
-    blocklist?: string[];
-}
-
-interface UmbrelBotDefaultConfig extends UmbrelBotConfig {
     version: number;
-    invalidPRConfig: InvalidPRDefaultConfig;
+    invalidPRConfig: InvalidPRConfig;
     blocklist: string[];
 }
 
-export const defaultConfig: UmbrelBotDefaultConfig = {
+export const defaultConfig: UmbrelBotConfig = {
     version: configVersion,
     invalidPRConfig: {
         // Filter explanation:
@@ -65,7 +50,7 @@ export async function getConfig(
     owner: string,
     repo: string,
 ): Promise<UmbrelBotConfig> {
-    const userConfig: UmbrelBotConfig =
+    const userConfig =
         (
             await octokit.config.get({
                 owner,
@@ -73,9 +58,9 @@ export async function getConfig(
                 path: '.github/UmbrelBot.yml',
             })
         ).config || {};
-    const newConfig: UmbrelBotDefaultConfig = {
+    const newConfig: UmbrelBotConfig = {
         ...defaultConfig,
-        ...(<UmbrelBotDefaultConfig>userConfig),
+        ...userConfig,
     };
     if (userConfig !== {} && userConfig.version && userConfig.version !== configVersion) {
         return defaultConfig;
