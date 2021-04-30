@@ -38,7 +38,7 @@ export default async function build(
         http,
         dir: folderPath,
         url: prInfo.data.head.repo.clone_url,
-        ref: prInfo.data.head.ref,
+        remoteRef: prInfo.data.head.sha,
     });
     await git.push({
         fs,
