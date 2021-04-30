@@ -10,5 +10,5 @@ function generateTable(): string {
     return table;
 }
 export default function helpText(context: Context): void {
-    context.octokit.issues.createComment({ ...context.issue(), body: generateTable() });
+    context.octokit.rest.issues.createComment({ ...context.issue(), body: generateTable() });
 }

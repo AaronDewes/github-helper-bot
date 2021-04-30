@@ -9,7 +9,7 @@ export default class CmdVersion extends Command {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static run(context: Context, _args: string, _isPR: boolean): void {
-        context.octokit.issues.createComment({
+        context.octokit.rest.issues.createComment({
             ...context.issue(),
             body: `This Bot is running UmbrelBot v${version} and supports version ${configVersion} of the configuration file.`,
         });

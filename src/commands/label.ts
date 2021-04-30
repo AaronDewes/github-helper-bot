@@ -18,10 +18,13 @@ export default class CmdLabel extends Command {
                     '',
                 );
             } else {
-                context.octokit.issues.createComment({ ...context.issue(), body: 'This label could not be found.' });
+                context.octokit.rest.issues.createComment({
+                    ...context.issue(),
+                    body: 'This label could not be found.',
+                });
             }
         } catch {
-            context.octokit.issues.createComment({ ...context.issue(), body: 'This label could not be found.' });
+            context.octokit.rest.issues.createComment({ ...context.issue(), body: 'This label could not be found.' });
         }
     }
 }

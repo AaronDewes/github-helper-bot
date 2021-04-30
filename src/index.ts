@@ -20,14 +20,14 @@ Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
 }
 
 async function build(context: Context): Promise<void> {
-    const prInfo = await BotOctokit.pulls.get(context.pullRequest());
+    const prInfo = await BotOctokit.rest.pulls.get(context.pullRequest());
     runBuild(
         context.octokit,
         context.repo().owner,
         context.repo().repo,
         context.pullRequest().pull_number,
         async (buildBranch) => {
-            BotOctokit.checks.create({
+            BotOctokit.rest.checks.create({
                 ...context.repo(),
                 status: 'completed',
                 conclusion: 'success',
@@ -48,7 +48,7 @@ module.exports = (app: Probot) => {
     app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
         BotOctokit = context.octokit;
         if (!allowedRepoOwners.includes(context.issue().owner)) {
-            context.octokit.issues.createComment({
+            context.octokit.rest.issues.createComment({
                 ...context.issue(),
                 body: getPermissionDeniedError(context.issue().owner),
             });
@@ -65,7 +65,7 @@ module.exports = (app: Probot) => {
         if (!command || (command && !command[1]) || context.payload.sender.type == 'bot') {
             return;
         }
-        const issueInfo = context.octokit.issues.get(context.issue());
+        const issueInfo = context.octokit.rest.issues.get(context.issue());
         let isPR = false;
         if ((await issueInfo).data.pull_request) {
             isPR = true;
@@ -74,7 +74,7 @@ module.exports = (app: Probot) => {
 
         // Delete comment with the command if only the comand is in there
         if (comment && comment.body?.trim() == `${command[1]} ${command[2]}`) {
-            context.octokit.issues.deleteComment({ ...context.issue(), comment_id: comment.id });
+            context.octokit.rest.issues.deleteComment({ ...context.issue(), comment_id: comment.id });
         }
     });
 

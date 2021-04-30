@@ -1,6 +1,12 @@
 # Changelog
 
-### 0.2.0: Bug fixes
+### 0.2.1:
+
+- Remove unused dependencies
+- Make job IDs more random
+- Fix a bug causing builds to be run on the wrong branch
+
+### 0.2.1: Bug fixes
 
 - Try to fix crash if `/label` is called with a label that doesn't exist
 - Remove unfurl feature

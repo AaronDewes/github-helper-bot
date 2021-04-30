@@ -1,22 +1,6 @@
 import { ProbotOctokit } from 'probot';
 
 /**
- * Generates a random hex value.
- *
- * This is pseudorandom and not cryptographically secure.
- * @param {number} count How long the generated string should be
- * @returns {string} A randomly generated string
- */
-export function randomHash(count: number): string {
-    if (count === 1) return (16 * Math.random()).toString(16).substr(2, 1);
-    else {
-        let hash = '';
-        for (let i = 0; i < count; i++) hash += randomHash(1);
-        return hash;
-    }
-}
-
-/**
  * Checks if a repo exists on GitHub (using Octokit)
  *
  * @param {ProbotOctokit} octokit An octokit instance with probot plugins
@@ -29,7 +13,7 @@ export async function repoExists(
     repo: string,
 ): Promise<boolean> {
     try {
-        await octokit.repos.get({
+        await octokit.rest.repos.get({
             owner,
             repo,
         });
@@ -58,7 +42,7 @@ export async function addLabel(
     color: string,
 ): Promise<void> {
     await ensureLabelExists(octokit, owner, repo, name, color);
-    await octokit.issues.addLabels({ repo, owner, issue_number, labels: [name] });
+    await octokit.rest.issues.addLabels({ repo, owner, issue_number, labels: [name] });
 }
 
 /**
@@ -75,7 +59,7 @@ export async function closeIssue(
     repo: string,
     issue_number: number,
 ): Promise<void> {
-    octokit.issues.update({ owner, repo, issue_number, state: 'closed' });
+    octokit.rest.issues.update({ owner, repo, issue_number, state: 'closed' });
 }
 
 /**
@@ -95,9 +79,9 @@ async function ensureLabelExists(
     color: string,
 ): Promise<void> {
     try {
-        await octokit.issues.getLabel({ repo, owner, name });
+        await octokit.rest.issues.getLabel({ repo, owner, name });
     } catch (e) {
-        octokit.issues.createLabel({ repo, owner, name, color });
+        octokit.rest.issues.createLabel({ repo, owner, name, color });
     }
 }
 
@@ -116,7 +100,7 @@ export async function labelExists(
     name: string,
 ): Promise<boolean> {
     try {
-        await octokit.issues.getLabel({ owner, repo, name });
+        await octokit.rest.issues.getLabel({ owner, repo, name });
         return true;
     } catch (e) {
         return false;
@@ -137,7 +121,7 @@ export async function hasPushAccess(
     repo: string,
     username: string,
 ): Promise<boolean> {
-    const permissionResponse = await octokit.repos.getCollaboratorPermissionLevel({ owner, repo, username });
+    const permissionResponse = await octokit.rest.repos.getCollaboratorPermissionLevel({ owner, repo, username });
     const level = permissionResponse.data.permission;
 
     return level === 'admin' || level === 'write';

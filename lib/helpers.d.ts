@@ -1,5 +1,4 @@
 import { ProbotOctokit } from 'probot';
-export declare function randomHash(count: number): string;
 export declare function repoExists(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string): Promise<boolean>;
 export declare function addLabel(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number, name: string, color: string): Promise<void>;
 export declare function closeIssue(octokit: InstanceType<typeof ProbotOctokit>, owner: string, repo: string, issue_number: number): Promise<void>;

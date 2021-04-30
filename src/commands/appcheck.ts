@@ -45,7 +45,11 @@ async function getAppUpgrades(): Promise<string> {
         let tagName = '';
         const appVersion = app.version;
         if (app.id === 'lnbits') {
-            const lnbitsRepo = await octokit.rest.repos.getCommit({ owner: 'lnbits', repo: 'lnbits', ref: 'master' });
+            const lnbitsRepo = await octokit.rest.repos.getCommit({
+                owner: 'lnbits',
+                repo: 'lnbits',
+                ref: 'master',
+            });
             if (lnbitsRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
                 potentialUpdates.push({
                     umbrel: appVersion,
@@ -94,6 +98,6 @@ export default class CmdHelp extends Command {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async run(context: Context, _args: string, _isPR: boolean): Promise<void> {
-        context.octokit.issues.createComment({ ...context.issue(), body: await getAppUpgrades() });
+        context.octokit.rest.issues.createComment({ ...context.issue(), body: await getAppUpgrades() });
     }
 }

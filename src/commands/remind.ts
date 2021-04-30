@@ -14,14 +14,14 @@ import Command from './command';
  */
 async function postReminder(context: Context, text: string, author: string, target: string): Promise<void> {
     if (author == target) {
-        await context.octokit.issues.createComment(
+        await context.octokit.rest.issues.createComment(
             context.issue({
                 body: `@${target} You asked me to remind you of ${text}!`,
             }),
         );
         return;
     }
-    await context.octokit.issues.createComment(
+    await context.octokit.rest.issues.createComment(
         context.issue({
             body: `:wave: @${target}, ${author} asked me to remind you of ${text}!`,
         }),
@@ -44,13 +44,13 @@ async function remind(context: Context, args: string): Promise<void> {
         if (reminder.who.startsWith('@')) {
             reminder.who = reminder.who.substring(1);
         }
-        await context.octokit.issues.createComment(
+        await context.octokit.rest.issues.createComment(
             context.issue({
                 body: `@${context.payload.sender.login} set a reminder for **${reminder.when.toUTCString()}**`,
             }),
         );
     } else {
-        await context.octokit.issues.createComment(
+        await context.octokit.rest.issues.createComment(
             context.issue({
                 body: `@${context.payload.sender.login} I had trouble parsing your reminder. Try:\n\n\`/remind me [what] [when]\``,
             }),

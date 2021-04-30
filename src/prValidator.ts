@@ -27,9 +27,9 @@ export default async function validatePr(context: Context): Promise<void> {
         return;
     }
 
-    await context.octokit.issues.createComment({
+    await context.octokit.rest.issues.createComment({
         ...context.issue(),
-        body: config.invalidPRConfig?.commentBody || defaultConfig.invalidPRConfig.commentBody,
+        body: config.invalidPRConfig.commentBody,
     });
     if (config.invalidPRConfig?.addLabel) {
         await addLabel(
@@ -37,8 +37,8 @@ export default async function validatePr(context: Context): Promise<void> {
             context.repo().owner,
             context.repo().repo,
             context.issue().issue_number,
-            config.invalidPRConfig.labelName || defaultConfig.invalidPRConfig.labelName,
-            config.invalidPRConfig.labelColor || defaultConfig.invalidPRConfig.labelColor,
+            config.invalidPRConfig.labelName,
+            config.invalidPRConfig.labelColor,
         );
     }
     return closeIssue(context.octokit, context.repo().owner, context.repo().repo, context.issue().issue_number);
