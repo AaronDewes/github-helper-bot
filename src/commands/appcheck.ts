@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-import { Octokit } from '@octokit/rest';
-import { Context } from 'probot';
+import { Context, ProbotOctokit } from 'probot';
 import Command from './command';
 import semver from 'semver';
 
@@ -29,8 +28,7 @@ interface VersionDiff {
     current: string;
 }
 
-async function getAppUpgrades(): Promise<string> {
-    const octokit = new Octokit();
+async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>): Promise<string> {
     const data: UmbrelApp[] = await (
         await fetch('https://raw.githubusercontent.com/getumbrel/umbrel/master/apps/registry.json')
     ).json();
@@ -98,6 +96,6 @@ export default class CmdHelp extends Command {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     static async run(context: Context, _args: string, _isPR: boolean): Promise<void> {
-        context.octokit.rest.issues.createComment({ ...context.issue(), body: await getAppUpgrades() });
+        context.octokit.rest.issues.createComment({ ...context.issue(), body: await getAppUpgrades(context.octokit) });
     }
 }
