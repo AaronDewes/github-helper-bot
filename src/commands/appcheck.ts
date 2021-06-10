@@ -29,7 +29,7 @@ interface VersionDiff {
     current: string;
 }
 
-async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>): Promise<string> {
+export async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>): Promise<string> {
     const data: UmbrelApp[] = await (
         await fetch('https://raw.githubusercontent.com/getumbrel/umbrel/master/apps/registry.json')
     ).json();
