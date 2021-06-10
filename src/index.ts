@@ -32,8 +32,8 @@ async function build(context: Context): Promise<void> {
                 status: 'completed',
                 conclusion: 'success',
                 output: {
-                    title: 'Started build of the image',
-                    summary: `The image will soon be on Docker Hub as umbrelbuilds/${context
+                    title: 'Started build of the Docker container',
+                    summary: `A Docker container fot this Pull Request will soon be available on Docker Hub as umbrelbuilds/${context
                         .repo()
                         .repo.replace('umbrel-', '')}:${buildBranch}`,
                 },

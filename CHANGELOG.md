@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.2.2
+
+- Improve app update handling
+- Update dependencies
+- Text changes
 ### 0.2.1:
 
 - Remove unused dependencies
@@ -20,4 +25,4 @@
 
 ### 0.1.0: Initial release
 
-- The initial, tested release of the Bot.
+- The initial, tested release of the bot.

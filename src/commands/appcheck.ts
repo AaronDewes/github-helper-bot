@@ -20,6 +20,7 @@ interface UmbrelApp {
     path: string;
     defaultPassword: string;
     versionCheck?: boolean;
+    useCommits?: boolean;
 }
 
 interface VersionDiff {
@@ -42,16 +43,16 @@ async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>): Prom
         const repoInfo = app.repo.replace('https://github.com/', '').split('/');
         let tagName = '';
         const appVersion = app.version;
-        if (app.id === 'lnbits') {
-            const lnbitsRepo = await octokit.rest.repos.getCommit({
-                owner: 'lnbits',
-                repo: 'lnbits',
+        if (app.id === 'lnbits' || app.useCommits) {
+            const appRepo = await octokit.rest.repos.getCommit({
+                owner: repoInfo[0],
+                repo: repoInfo[1],
                 ref: 'master',
             });
-            if (lnbitsRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
+            if (appRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
                 potentialUpdates.push({
                     umbrel: appVersion,
-                    current: lnbitsRepo.data.commit.tree.sha.substr(0, 7),
+                    current: appRepo.data.commit.tree.sha.substr(0, 7),
                     app: app.name,
                 });
             }
@@ -59,7 +60,7 @@ async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>): Prom
         } else {
             const tagList = await octokit.rest.repos.listTags({ owner: repoInfo[0], repo: repoInfo[1] });
             for (const tag of tagList.data) {
-                if (!semver.valid(app.version) && app.id !== 'lnbits') {
+                if (!semver.valid(app.version)) {
                     console.info('Not a valid semver.');
                     continue;
                 }
