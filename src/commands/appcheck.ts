@@ -49,10 +49,10 @@ export async function getAppUpgrades(octokit: InstanceType<typeof ProbotOctokit>
                 repo: repoInfo[1],
                 ref: 'master',
             });
-            if (appRepo.data.commit.tree.sha.substr(0, 7) !== app.version) {
+            if (appRepo.data.sha.substr(0, 7) !== app.version) {
                 potentialUpdates.push({
                     umbrel: appVersion,
-                    current: appRepo.data.commit.tree.sha.substr(0, 7),
+                    current: appRepo.data.sha.substr(0, 7),
                     app: app.name,
                 });
             }

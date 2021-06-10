@@ -1,5 +1,9 @@
 # Changelog
 
+# 0.2.3
+
+- Update to Yarn 3
+- Fix LNBits version check
 ### 0.2.2
 
 - Improve app update handling
