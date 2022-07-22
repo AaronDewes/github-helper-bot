@@ -1,8 +1,8 @@
-## How to configure UmbrelBot
+## How to configure CitadelBot
 
 This bot is configured in one of your repos, but changes apply to all of them.
 
-To configure the bot, create a file `.github/UmbrelBot.yml` with the following content (change it to fit your needs):
+To configure the bot, create a file `.github/CitadelBot.yml` with the following content (change it to fit your needs):
 
 ```yaml
 version: 1

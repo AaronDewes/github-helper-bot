@@ -1,11 +1,9 @@
-import appcheck from './appcheck';
 import label from './label';
 import remind from './remind';
 import version from './version';
 import Command from './command';
 
 const commands: Record<string, typeof Command> = {
-    appcheck,
     label,
     remind,
     version,

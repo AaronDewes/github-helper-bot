@@ -1,6 +1,6 @@
 import { Probot, Context, ProbotOctokit } from 'probot';
 
-import { getConfig, UmbrelBotConfig } from './config';
+import { getConfig, CitadelBotConfig } from './config';
 import handleCommand from './commands';
 import { allowedRepoOwners } from './consts';
 import validatePr from './prValidator';
@@ -53,7 +53,7 @@ module.exports = (app: Probot) => {
                 body: getPermissionDeniedError(context.issue().owner),
             });
         }
-        const config: UmbrelBotConfig = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
+        const config: CitadelBotConfig = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
         if (config.blocklist && config.blocklist.includes(context.payload.sender.login)) {
             console.warn(`User @${context.payload.sender} tried to use the bot without permission.`);
             return;

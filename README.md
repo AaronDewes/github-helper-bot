@@ -1,6 +1,7 @@
 # GitHub helper bot
 
-A bot to make GitHub development much easier, originally developed for Umbrel.
+A bot to make GitHub development much easier, originally developed for Umbrel, now used by Citadel.
+
 ## Sources
 
 This bot wouldn't be possible without these amazing projects:
@@ -12,8 +13,6 @@ This bot wouldn't be possible without these amazing projects:
 ... And, of course, every dependency in our dependency tree.
 
 Thanks to everyone who created or helped creating these projects!
-
-Special thanks to [Luke Childs](https://github.com/lukechilds) who provides the server for UmbrelBot and of course provides some packages in the dependency tree (he probably does that for 99% of projects using npm).
 
 ### What this bot does
 

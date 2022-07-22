@@ -30,7 +30,7 @@ export default async function build(
         recursive: true,
     });
     await git.clone({ fs, http, dir: folderPath, url: prInfo.data.base.repo.clone_url });
-    await git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'UmbrelBot' });
+    await git.setConfig({ fs, dir: folderPath, path: 'user.name', value: 'CitadelBot' });
     await git.setConfig({ fs, dir: folderPath, path: 'user.email', value: 'bot@umbrel.tech' });
     await git.branch({ fs, dir: folderPath, ref: buildBranch, checkout: true });
     await git.pull({

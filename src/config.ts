@@ -9,13 +9,13 @@ interface InvalidPRConfig {
     labelName: string;
     labelColor: string;
 }
-export interface UmbrelBotConfig {
+export interface CitadelBotConfig {
     version: number;
     invalidPRConfig: InvalidPRConfig;
     blocklist: string[];
 }
 
-export const defaultConfig: UmbrelBotConfig = {
+export const defaultConfig: CitadelBotConfig = {
     version: configVersion,
     invalidPRConfig: {
         // Filter explanation:
@@ -49,16 +49,16 @@ export async function getConfig(
     octokit: InstanceType<typeof ProbotOctokit>,
     owner: string,
     repo: string,
-): Promise<UmbrelBotConfig> {
+): Promise<CitadelBotConfig> {
     const userConfig =
         (
             await octokit.config.get({
                 owner,
                 repo,
-                path: '.github/UmbrelBot.yml',
+                path: '.github/CitadelBot.yml',
             })
         ).config || {};
-    const newConfig: UmbrelBotConfig = {
+    const newConfig: CitadelBotConfig = {
         ...defaultConfig,
         ...userConfig,
     };
