@@ -4,7 +4,7 @@ import { closeIssue, addLabel, hasPushAccess } from './helpers';
 import { defaultConfig, getConfig } from './config';
 import jp from 'jsonpath';
 
-export default async function validatePr(context: Context): Promise<void> {
+export default async function validatePr(context: Context<'pull_request.opened'>): Promise<void> {
     const config = await getConfig(context.octokit, context.repo().owner, context.repo().repo);
     if (!config.invalidPRConfig?.enabled) return;
     const username = context.payload.pull_request.user.login;

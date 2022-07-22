@@ -12,7 +12,12 @@ import Command from './command';
  *
  * @private
  */
-async function postReminder(context: Context, text: string, author: string, target: string): Promise<void> {
+async function postReminder(
+    context: Context<'issue_comment.created'>,
+    text: string,
+    author: string,
+    target: string,
+): Promise<void> {
     if (author == target) {
         await context.octokit.rest.issues.createComment(
             context.issue({
@@ -34,7 +39,7 @@ async function postReminder(context: Context, text: string, author: string, targ
  * @param context The Probot context
  * @param args The arguments to the /remind command
  */
-async function remind(context: Context, args: string): Promise<void> {
+async function remind(context: Context<'issue_comment.created'>, args: string): Promise<void> {
     const reminder: parsedReminder = parseReminder(`remind ${args}`, '');
 
     if (reminder) {
@@ -58,14 +63,9 @@ async function remind(context: Context, args: string): Promise<void> {
         console.warn(`Unable to parse reminder: remind ${args}`);
     }
 
-    setTimeout(
-        postReminder,
-        +reminder.when - +Date.now(),
-        context,
-        reminder.what,
-        context.payload.sender.login,
-        reminder.who,
-    );
+    setTimeout(() => {
+        postReminder(context, reminder.what, context.payload.sender.login, reminder.who);
+    }, +reminder.when - +Date.now());
 }
 
 export default class CmdRemind extends Command {
@@ -73,7 +73,7 @@ export default class CmdRemind extends Command {
         'Remind someone of something at a specific time. Example: `/remind [who] [what] [when]`. Who can either be "me" or any GitHub user (like @octocat).';
     // Don't use an actual person on GitHub to avoid spamming their notifications, I hope no one is using the octocat account.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static run(context: Context, args: string, _isPR: boolean): void {
+    static run(context: Context<'issue_comment.created'>, args: string, _isPR: boolean): void {
         remind(context, args);
     }
 }

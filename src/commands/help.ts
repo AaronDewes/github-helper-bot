@@ -9,6 +9,6 @@ function generateTable(): string {
     }
     return table;
 }
-export default function helpText(context: Context): void {
+export default function helpText(context: Context<'issue_comment.created'>): void {
     context.octokit.rest.issues.createComment({ ...context.issue(), body: generateTable() });
 }

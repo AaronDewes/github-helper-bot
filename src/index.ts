@@ -16,10 +16,12 @@ You tried to use me in your own repositories or organization (@${username}).
 I can only be used on authorized repos and not everywhere.
 My source code is public, so you can host me myself if you like me.
 Check [this repo](https://github.com/AaronDewes/github-helper-bot) to view it.
+
+I recommend uninstalling this bot to prevent spam messages like this one.
 `;
 }
 
-async function build(context: Context): Promise<void> {
+async function build(context: Context<'pull_request.opened' | 'pull_request.synchronize'>): Promise<void> {
     const prInfo = await BotOctokit.rest.pulls.get(context.pullRequest());
     runBuild(
         context.octokit,
@@ -45,7 +47,7 @@ async function build(context: Context): Promise<void> {
 }
 
 module.exports = (app: Probot) => {
-    app.on(['issue_comment.created', 'issue_comment.edited'], async (context) => {
+    app.on('issue_comment.created', async (context: Context<'issue_comment.created'>) => {
         BotOctokit = context.octokit;
         if (!allowedRepoOwners.includes(context.issue().owner)) {
             context.octokit.rest.issues.createComment({
@@ -62,7 +64,7 @@ module.exports = (app: Probot) => {
         // Check if it is a command
         const { comment, issue } = context.payload;
         const command = <RegExpMatchArray>(comment || issue).body.match(/^\/([\w]+)\b *(.*)?$/m);
-        if (!command || (command && !command[1]) || context.payload.sender.type == 'bot') {
+        if (!command || (command && !command[1]) || context.payload.sender.type == 'Bot') {
             return;
         }
         const issueInfo = context.octokit.rest.issues.get(context.issue());

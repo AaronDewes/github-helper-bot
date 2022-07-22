@@ -5,10 +5,9 @@ import Command from './command';
 export default class CmdLabel extends Command {
     static helptext = 'This adds a label to the current PR/issue.';
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    static run(context: Context, args: string, _isPR: boolean): void {
+    static async run(context: Context<'issue_comment.created'>, args: string): Promise<void> {
         try {
-            if (labelExists(context.octokit, context.repo().owner, context.repo().repo, args)) {
+            if (await labelExists(context.octokit, context.repo().owner, context.repo().repo, args)) {
                 addLabel(
                     context.octokit,
                     context.repo().owner,
