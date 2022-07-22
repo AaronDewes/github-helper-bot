@@ -36,7 +36,6 @@
     "@types/jsdom": "^16.2.15",
     "@types/jsonpath": "^0.2.0",
     "@types/node": "^18.0.6",
-    "@types/node-fetch": "^2.6.2",
     "@types/semver": "^7.3.10",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
